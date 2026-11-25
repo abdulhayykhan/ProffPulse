@@ -205,7 +205,7 @@ function initTheme() {
 }
 
 async function loadSyllabus() {
-  const candidates = ["../data/syllabus.json", "./data/syllabus.json"];
+  const candidates = ["/api/syllabus", "../data/syllabus.json", "./data/syllabus.json"];
   for (const url of candidates) {
     try {
       const res = await fetch(url);
@@ -218,7 +218,7 @@ async function loadSyllabus() {
     }
   }
   if (!state.syllabus) {
-    $("lo-summary-text").textContent = "Could not load data/syllabus.json (serve via HTTP server)";
+    $("lo-summary-text").textContent = "Could not load syllabus data";
     return;
   }
   populateModules();
@@ -359,11 +359,41 @@ function bindConfigEvents() {
     state.config.length = Number(val);
   });
 
-  $("config-form").addEventListener("submit", (e) => {
+  $("config-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const questions = buildSessionQuestions(state.config);
-    startSession(questions, state.config.mode);
+    const btn = $("start-btn");
+    btn.disabled = true;
+    btn.textContent = "Loading MCQs…";
+    try {
+      const questions = await fetchSessionQuestions(state.config);
+      startSession(questions, state.config.mode);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Start Quiz <span aria-hidden="true">→</span>';
+    }
   });
+}
+
+async function fetchSessionQuestions(cfg) {
+  const params = new URLSearchParams({
+    module: cfg.moduleId,
+    subject: cfg.subjectId,
+    topic: cfg.topicId,
+    source: cfg.source,
+    limit: String(cfg.length),
+  });
+  try {
+    const res = await fetch(`/api/questions?${params.toString()}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.questions) && data.questions.length > 0) {
+        return data.questions;
+      }
+    }
+  } catch {
+    // Fallback to local seed/LO questions if backend unavailable
+  }
+  return buildSessionQuestions(cfg);
 }
 
 function bindGroup(containerId, selector, onSelect) {
@@ -679,8 +709,24 @@ function finishSession() {
   };
 
   $("practice-weak-btn").disabled = weakEntries.length === 0;
-  $("practice-weak-btn").onclick = () => {
+  $("practice-weak-btn").onclick = async () => {
     const weakTopics = weakEntries.map(([t]) => t);
+    try {
+      const res = await fetch("/api/sessions/weak-topics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ module: state.config.moduleId, weak_topics: weakTopics, limit: 10 }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.questions) && data.questions.length > 0) {
+          startSession(data.questions, "practice");
+          return;
+        }
+      }
+    } catch {
+      // Fallback below
+    }
     const targeted = buildSessionQuestions({ ...state.config, length: 10 }, weakTopics);
     startSession(targeted, "practice");
   };
