@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>ProffPulse — 1st-Year MBBS MCQ Arena</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -95,9 +95,14 @@
 
         <div class="config-footer">
           <p class="mode-hint" id="mode-hint">Practice Mode: Instant reveal + distractor breakdown after every question.</p>
-          <button type="submit" class="btn btn-primary btn-lg" id="start-btn">
-            Start Quiz <span aria-hidden="true">→</span>
-          </button>
+          <div class="config-cta-group">
+            <button type="button" class="btn btn-secondary hidden" id="saved-mistakes-btn">
+              Review Mistakes (<span id="saved-mistakes-count">0</span>)
+            </button>
+            <button type="submit" class="btn btn-primary btn-lg" id="start-btn">
+              Start Quiz <span aria-hidden="true">→</span>
+            </button>
+          </div>
         </div>
       </form>
     </main>

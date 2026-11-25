@@ -183,11 +183,41 @@ const state = {
 const $ = (id) => document.getElementById(id);
 
 // --- Initialization ---
+const MISTAKES_KEY = "proffpulse-mistakes";
+
+function loadSavedMistakes() {
+  try {
+    const raw = localStorage.getItem(MISTAKES_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveMistakes(list) {
+  try {
+    localStorage.setItem(MISTAKES_KEY, JSON.stringify(list.slice(0, 100)));
+  } catch {
+    // Ignore storage quota errors
+  }
+  refreshSavedMistakesUI();
+}
+
+function refreshSavedMistakesUI() {
+  const saved = loadSavedMistakes();
+  const btn = $("saved-mistakes-btn");
+  const countEl = $("saved-mistakes-count");
+  if (!btn || !countEl) return;
+  countEl.textContent = String(saved.length);
+  btn.classList.toggle("hidden", saved.length === 0);
+}
+
 async function init() {
   initTheme();
   bindConfigEvents();
   bindArenaEvents();
   bindVerdictEvents();
+  refreshSavedMistakesUI();
   await loadSyllabus();
 }
 
@@ -357,6 +387,13 @@ function bindConfigEvents() {
 
   bindGroup("length-group", ".pill", (val) => {
     state.config.length = Number(val);
+  });
+
+  $("saved-mistakes-btn").addEventListener("click", () => {
+    const saved = loadSavedMistakes();
+    if (saved.length > 0) {
+      startSession(saved.slice(0, state.config.length), "practice");
+    }
   });
 
   $("config-form").addEventListener("submit", async (e) => {
@@ -676,6 +713,13 @@ function finishSession() {
       weakTopicCounts[q.topic] = (weakTopicCounts[q.topic] || 0) + 1;
     }
   });
+
+  const wrongIds = new Set(wrongQuestions.map((q) => q.id));
+  const correctIds = new Set(
+    questions.filter((_, i) => answers[i] === questions[i].correctIndex).map((q) => q.id)
+  );
+  const existing = loadSavedMistakes().filter((q) => !correctIds.has(q.id) && !wrongIds.has(q.id));
+  saveMistakes([...wrongQuestions, ...existing]);
 
   const total = questions.length;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
