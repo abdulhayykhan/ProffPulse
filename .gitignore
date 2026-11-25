@@ -1,0 +1,21 @@
+# Raw study material & internal planning docs (never push)
+1st year/
+PRD.md
+
+# Environment & secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
