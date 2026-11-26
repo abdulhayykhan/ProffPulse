@@ -1,4 +1,18 @@
-// ProffPulse — Phase 1 Interactive 3-Screen Frontend
+// ProffPulse — Interactive 1st-Year MBBS MCQ Arena
+
+const MODULE_META = {
+  foundation: { icon: "🧬", color: "#38bdf8", sub: "Cell · Enzymes · General" },
+  blood: { icon: "🩸", color: "#fb7185", sub: "Heme · RBCs · Immunity" },
+  locomotion: { icon: "🦴", color: "#f59e0b", sub: "Limbs · Muscle · Bone" },
+  respiration: { icon: "🫁", color: "#34d399", sub: "Thorax · ABGs · Lungs" },
+  cvs: { icon: "🫀", color: "#a78bfa", sub: "Heart · ECG · Lipids" },
+  islamiat: { icon: "🕌", color: "#fbbf24", sub: "Quran · Seerah · Hadith" },
+};
+
+const MISTAKES_KEY = "proffpulse-mistakes";
+const STATS_KEY = "proffpulse-stats";
+const THEME_KEY = "proffpulse-theme";
+const SOUND_KEY = "proffpulse-sound";
 
 const SEED_QUESTIONS = [
   {
@@ -12,179 +26,138 @@ const SEED_QUESTIONS = [
       "Hyaline cartilage covering the articular surfaces",
       "Fibrocartilage uniting the bones directly",
       "Absence of a joint cavity",
-      "Interosseous membrane between shafts"
+      "Interosseous membrane between shafts",
     ],
     correctIndex: 0,
     concept: "Synovial joints possess a fluid-filled joint cavity, fibrous capsule lined by synovial membrane, and articular surfaces typically covered by hyaline cartilage.",
     distractors: [
       "B: Fibrocartilage uniting bones directly describes symphyses (secondary cartilaginous joints).",
       "C: Synovial joints always have a joint cavity; fibrous and cartilaginous joints lack one.",
-      "D: Interosseous membranes are syndesmoses (fibrous joints), not synovial joints."
+      "D: Interosseous membranes are syndesmoses (fibrous joints), not synovial joints.",
     ],
-    loRef: "JSMU Foundation · Anatomy LO: List the features of synovial joint"
+    loRef: "JSMU Foundation · Anatomy LO: List the features of synovial joint",
   },
-  {
-    id: "seed-2",
-    module: "foundation",
-    subject: "Biochemistry",
-    topic: "Enzyme Kinetics",
-    source: "AI Fresh BCQ",
-    stem: "A drug binds exclusively to the enzyme-substrate (ES) complex and lowers both Vmax and Km by the same factor. What type of inhibition is this?",
-    options: [
-      "Competitive inhibition",
-      "Uncompetitive inhibition",
-      "Non-competitive inhibition",
-      "Irreversible inhibition"
-    ],
-    correctIndex: 1,
-    concept: "Uncompetitive inhibitors bind only to the ES complex, decreasing both Vmax and Km proportionately (parallel lines on a Lineweaver-Burk plot).",
-    distractors: [
-      "A: Competitive inhibition increases apparent Km while Vmax remains unchanged.",
-      "C: Pure non-competitive inhibition decreases Vmax while Km remains unchanged.",
-      "D: Irreversible inhibitors permanently inactivate enzyme molecules, reducing active [E] and Vmax."
-    ],
-    loRef: "JSMU Foundation · Biochemistry LO: Enzyme Kinetics & Inhibition"
-  },
-  {
-    id: "seed-3",
-    module: "blood",
-    subject: "Physiology",
-    topic: "Erythropoiesis",
-    source: "Past Bank",
-    stem: "A patient with chronic renal failure develops normocytic normochromic anemia. Decreased production of which hormone is primarily responsible?",
-    options: [
-      "Thrombopoietin",
-      "Erythropoietin",
-      "Hepcidin",
-      "Intrinsic factor"
-    ],
-    correctIndex: 1,
-    concept: "Peritubular interstitial cells of the kidney produce ~90% of erythropoietin (EPO) in response to hypoxia, stimulating RBC production in bone marrow.",
-    distractors: [
-      "A: Thrombopoietin (mainly hepatic) regulates megakaryocyte/platelet production.",
-      "C: Hepcidin inhibits iron absorption/release; excess hepcidin causes anemia of chronic disease, not EPO deficiency.",
-      "D: Intrinsic factor is secreted by gastric parietal cells for vitamin B12 absorption."
-    ],
-    loRef: "JSMU Blood · Physiology LO: Regulation of erythropoiesis"
-  },
-  {
-    id: "seed-4",
-    module: "locomotion",
-    subject: "Anatomy",
-    topic: "Brachial Plexus",
-    source: "Past Bank",
-    stem: "Following a fall onto the shoulder, a newborn presents with an adducted, medially rotated arm and pronated forearm ('waiter's tip' position). Which roots are injured?",
-    options: [
-      "C5 and C6",
-      "C8 and T1",
-      "C6 and C7",
-      "C7 and C8"
-    ],
-    correctIndex: 0,
-    concept: "Erb-Duchenne palsy results from injury to the upper trunk (C5–C6) of the brachial plexus, paralyzing abductors/lateral rotators of the shoulder and flexors/supinators of the forearm.",
-    distractors: [
-      "B: C8–T1 injury causes Klumpke palsy (claw hand), affecting intrinsic hand muscles.",
-      "C: C6–C7 primarily contributes to radial/median nerve triceps and wrist extensors.",
-      "D: C7–C8 alone does not produce the classic Erb's waiter's tip posture."
-    ],
-    loRef: "JSMU Locomotor · Anatomy LO: Brachial plexus lesions"
-  },
-  {
-    id: "seed-5",
-    module: "respiration",
-    subject: "Physiology",
-    topic: "Oxygen-Hemoglobin Dissociation Curve",
-    source: "AI Fresh BCQ",
-    stem: "During vigorous skeletal muscle exercise, local tissue PCO2 rises and pH falls. How does this affect the oxygen-hemoglobin dissociation curve?",
-    options: [
-      "Shifts to the left, increasing O2 affinity",
-      "Shifts to the right, facilitating O2 unloading",
-      "No shift; only P50 decreases",
-      "Shifts to the left, decreasing P50"
-    ],
-    correctIndex: 1,
-    concept: "The Bohr effect: increased CO2, decreased pH (H+), increased temperature, and increased 2,3-BPG shift the curve to the right (higher P50), promoting O2 release to metabolically active tissues.",
-    distractors: [
-      "A: A left shift occurs with alkalosis, hypothermia, or fetal Hb, holding O2 more tightly.",
-      "C: Right shift increases P50 (more PO2 needed for 50% saturation).",
-      "D: Left shift decreases P50, which impairs unloading in exercising muscle."
-    ],
-    loRef: "JSMU Respiratory · Physiology LO: Bohr effect & O2 transport"
-  },
-  {
-    id: "seed-6",
-    module: "cvs",
-    subject: "Anatomy",
-    topic: "Coronary blood vessels, blood supply of heart",
-    source: "Past Bank",
-    stem: "In a right-dominant heart, the posterior interventricular (posterior descending) artery most commonly arises from which vessel?",
-    options: [
-      "Left anterior descending artery",
-      "Left circumflex artery",
-      "Right coronary artery",
-      "Left main coronary artery"
-    ],
-    correctIndex: 2,
-    concept: "Coronary dominance is defined by which artery gives off the posterior interventricular artery (PDA); in ~85% of individuals it arises from the right coronary artery (right dominance).",
-    distractors: [
-      "A: LAD supplies the anterior two-thirds of the interventricular septum and apex.",
-      "B: Left circumflex gives off the PDA only in left-dominant hearts (~10%).",
-      "D: The left main coronary artery bifurcates into LAD and LCx."
-    ],
-    loRef: "JSMU Cardiovascular · Anatomy LO: Right and left coronary dominance"
-  },
-  {
-    id: "seed-7",
-    module: "islamiat",
-    subject: "Islamiat",
-    topic: "Introduction To The Holy Quran",
-    source: "Past Bank",
-    stem: "Under whose caliphate was the first official compilation of the Holy Quran into a single Mushaf (book form) carried out, supervised by Zaid bin Thabit (R.A.)?",
-    options: [
-      "Umar ibn al-Khattab (R.A.)",
-      "Abu Bakr al-Siddiq (R.A.)",
-      "Uthman ibn Affan (R.A.)",
-      "Ali ibn Abi Talib (R.A.)"
-    ],
-    correctIndex: 1,
-    concept: "After the Battle of Yamama, Hazrat Abu Bakr (R.A.)—on the counsel of Hazrat Umar (R.A.)—commissioned Zaid bin Thabit (R.A.) to compile the Quran into one bound volume.",
-    distractors: [
-      "A: Hazrat Umar (R.A.) proposed the compilation after Yamama, during Abu Bakr's caliphate.",
-      "C: Hazrat Uthman (R.A.) later standardized the script/dialect (Quraish) and distributed copies.",
-      "D: Hazrat Ali (R.A.) was the fourth caliph, after Uthman (R.A.)."
-    ],
-    loRef: "JSMU Islamic Studies · Topic 1 LO: Compilation of the Quran"
-  }
 ];
 
 const state = {
   syllabus: null,
+  soundEnabled: true,
+  audioCtx: null,
   config: {
     moduleId: "",
     subjectId: "all",
     topicId: "all",
+    topicQuery: "",
     source: "mixed",
     mode: "practice",
-    length: 10
+    length: 10,
   },
   session: {
     questions: [],
     currentIndex: 0,
     answers: [],
+    flagged: [],
     streak: 0,
     bestStreak: 0,
     timerSeconds: 0,
     timerId: null,
     questionStartMs: 0,
-    timingsMs: []
-  }
+    timingsMs: [],
+  },
 };
 
 const $ = (id) => document.getElementById(id);
 
 // --- Initialization ---
-const MISTAKES_KEY = "proffpulse-mistakes";
+async function init() {
+  initTheme();
+  initSound();
+  renderMomentumStats();
+  refreshSavedMistakesUI();
+  bindConfigEvents();
+  bindArenaEvents();
+  bindVerdictEvents();
+  await Promise.all([loadSyllabus(), loadHealth()]);
+}
 
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || "dark";
+  document.documentElement.setAttribute("data-theme", saved);
+  $("theme-icon").textContent = saved === "light" ? "🌙" : "☀️";
+  $("theme-toggle").addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const next = cur === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem(THEME_KEY, next);
+    $("theme-icon").textContent = next === "light" ? "🌙" : "☀️";
+  });
+}
+
+function initSound() {
+  const saved = localStorage.getItem(SOUND_KEY);
+  state.soundEnabled = saved === null ? true : saved === "true";
+  $("sound-icon").textContent = state.soundEnabled ? "🔊" : "🔇";
+  $("sound-toggle").addEventListener("click", () => {
+    state.soundEnabled = !state.soundEnabled;
+    localStorage.setItem(SOUND_KEY, String(state.soundEnabled));
+    $("sound-icon").textContent = state.soundEnabled ? "🔊" : "🔇";
+    if (state.soundEnabled) playTone("click");
+  });
+}
+
+function playTone(type) {
+  if (!state.soundEnabled) return;
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!state.audioCtx) state.audioCtx = new Ctx();
+    const ctx = state.audioCtx;
+    if (ctx.state === "suspended") ctx.resume();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    const now = ctx.currentTime;
+    if (type === "correct") {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.11);
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+      osc.start(now);
+      osc.stop(now + 0.17);
+    } else if (type === "wrong") {
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(240, now);
+      osc.frequency.exponentialRampToValueAtTime(160, now + 0.14);
+      gain.gain.setValueAtTime(0.07, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+      osc.start(now);
+      osc.stop(now + 0.17);
+    } else {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(440, now);
+      gain.gain.setValueAtTime(0.03, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.06);
+    }
+  } catch {
+    // Ignore audio context restrictions
+  }
+}
+
+function showToast(msg) {
+  const el = $("toast");
+  el.textContent = msg;
+  el.classList.remove("hidden");
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.add("hidden"), 2600);
+}
+
+// --- Local Persistence ---
 function loadSavedMistakes() {
   try {
     const raw = localStorage.getItem(MISTAKES_KEY);
@@ -198,7 +171,7 @@ function saveMistakes(list) {
   try {
     localStorage.setItem(MISTAKES_KEY, JSON.stringify(list.slice(0, 100)));
   } catch {
-    // Ignore storage quota errors
+    // Ignore quota error
   }
   refreshSavedMistakesUI();
 }
@@ -212,26 +185,45 @@ function refreshSavedMistakesUI() {
   btn.classList.toggle("hidden", saved.length === 0);
 }
 
-async function init() {
-  initTheme();
-  bindConfigEvents();
-  bindArenaEvents();
-  bindVerdictEvents();
-  refreshSavedMistakesUI();
-  await loadSyllabus();
+function loadStats() {
+  try {
+    const raw = localStorage.getItem(STATS_KEY);
+    return raw ? JSON.parse(raw) : { totalSolved: 0, bestStreak: 0 };
+  } catch {
+    return { totalSolved: 0, bestStreak: 0 };
+  }
 }
 
-function initTheme() {
-  const saved = localStorage.getItem("proffpulse-theme") || "dark";
-  document.documentElement.setAttribute("data-theme", saved);
-  $("theme-icon").textContent = saved === "light" ? "🌙" : "☀️";
-  $("theme-toggle").addEventListener("click", () => {
-    const cur = document.documentElement.getAttribute("data-theme");
-    const next = cur === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("proffpulse-theme", next);
-    $("theme-icon").textContent = next === "light" ? "🌙" : "☀️";
-  });
+function recordSessionStats(solvedCount, sessionBestStreak) {
+  const stats = loadStats();
+  stats.totalSolved += solvedCount;
+  stats.bestStreak = Math.max(stats.bestStreak, sessionBestStreak);
+  try {
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+  } catch {
+    // Ignore
+  }
+  renderMomentumStats();
+}
+
+function renderMomentumStats() {
+  const stats = loadStats();
+  $("total-solved-badge").textContent = `✓ ${stats.totalSolved} solved`;
+  $("best-streak-badge").textContent = `🔥 ${stats.bestStreak} best`;
+}
+
+// --- Data Loading ---
+async function loadHealth() {
+  try {
+    const res = await fetch("/api/health");
+    if (!res.ok) return;
+    const h = await res.json();
+    const aiLabel = h.ai_configured ? "AI BCQs Ready" : "Past Bank Mode";
+    $("hero-status-text").textContent = `${h.past_bank_count} Verified Past MCQs · ${h.lecture_index_count} UMDC Lecture Sources · ${aiLabel}`;
+    $("ai-status-dot").style.background = h.ai_configured ? "var(--success)" : "var(--warning)";
+  } catch {
+    // Keep default label
+  }
 }
 
 async function loadSyllabus() {
@@ -244,53 +236,93 @@ async function loadSyllabus() {
         break;
       }
     } catch {
-      // Try next path
+      // Next fallback
     }
   }
   if (!state.syllabus) {
     $("lo-summary-text").textContent = "Could not load syllabus data";
     return;
   }
-  populateModules();
+  renderModuleCards();
 }
 
-// --- Screen 1: Cascading Filters ---
-function populateModules() {
-  const sel = $("select-module");
-  sel.innerHTML = "";
-  state.syllabus.modules.forEach((m) => {
-    const opt = document.createElement("option");
-    opt.value = m.id;
-    opt.textContent = `${m.order}. ${m.name}`;
-    sel.appendChild(opt);
+// --- Screen 1: Visual Configurator ---
+function renderModuleCards() {
+  const grid = $("module-grid");
+  grid.innerHTML = "";
+  const modules = state.syllabus.modules;
+  if (!state.config.moduleId && modules.length) {
+    state.config.moduleId = modules[0].id;
+  }
+
+  modules.forEach((m) => {
+    const meta = MODULE_META[m.id] || { icon: "📘", color: "#38bdf8", sub: "JSMU Module" };
+    const topicCount = m.subjects.reduce((acc, s) => acc + s.topics.length, 0);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `mod-card${m.id === state.config.moduleId ? " active" : ""}`;
+    btn.style.setProperty("--mod-accent", meta.color);
+    btn.dataset.moduleId = m.id;
+    btn.innerHTML = `
+      <span class="mod-icon">${meta.icon}</span>
+      <div class="mod-info">
+        <div class="mod-title">${m.order}. ${escapeHtml(m.name)}</div>
+        <div class="mod-meta">${topicCount} topics · ${meta.sub}</div>
+      </div>
+    `;
+    btn.addEventListener("click", () => {
+      state.config.moduleId = m.id;
+      state.config.topicQuery = "";
+      $("topic-search").value = "";
+      grid.querySelectorAll(".mod-card").forEach((c) => c.classList.remove("active"));
+      btn.classList.add("active");
+      playTone("click");
+      renderSubjectChips();
+    });
+    grid.appendChild(btn);
   });
-  state.config.moduleId = state.syllabus.modules[0]?.id || "";
-  sel.value = state.config.moduleId;
-  populateSubjects();
+
+  renderSubjectChips();
 }
 
-function populateSubjects() {
+function renderSubjectChips() {
   const mod = state.syllabus.modules.find((m) => m.id === state.config.moduleId);
-  const sel = $("select-subject");
-  sel.innerHTML = `<option value="all">All Subjects</option>`;
+  const row = $("subject-chips");
+  row.innerHTML = "";
+
+  const makeChip = (id, label, active) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = `chip${active ? " active" : ""}`;
+    btn.textContent = label;
+    btn.addEventListener("click", () => {
+      state.config.subjectId = id;
+      row.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
+      btn.classList.add("active");
+      playTone("click");
+      populateTopics();
+    });
+    row.appendChild(btn);
+  };
+
+  state.config.subjectId = "all";
+  makeChip("all", "All Subjects", true);
+
   if (mod) {
     mod.subjects.forEach((s) => {
-      const opt = document.createElement("option");
-      opt.value = s.id;
-      opt.textContent = `${s.name} (${s.topics.length} topics)`;
-      sel.appendChild(opt);
+      makeChip(s.id, `${s.name} (${s.topics.length})`, false);
     });
   }
-  state.config.subjectId = "all";
-  sel.value = "all";
   populateTopics();
 }
 
 function populateTopics() {
   const mod = state.syllabus.modules.find((m) => m.id === state.config.moduleId);
   const sel = $("select-topic");
-  sel.innerHTML = `<option value="all">All Topics</option>`;
+  const query = state.config.topicQuery.trim().toLowerCase();
+  sel.innerHTML = `<option value="all">All Topics (High-Yield Mix)</option>`;
 
+  let matchCount = 0;
   if (mod) {
     const subjects =
       state.config.subjectId === "all"
@@ -299,6 +331,10 @@ function populateTopics() {
 
     subjects.forEach((s) => {
       s.topics.forEach((t) => {
+        if (query && !t.title.toLowerCase().includes(query) && !s.name.toLowerCase().includes(query)) {
+          return;
+        }
+        matchCount++;
         const opt = document.createElement("option");
         opt.value = t.id;
         opt.textContent = state.config.subjectId === "all" ? `[${s.name}] ${t.title}` : t.title;
@@ -306,8 +342,11 @@ function populateTopics() {
       });
     });
   }
+
+  // If user searched and found topics, pre-select "all" or keep matching
   state.config.topicId = "all";
   sel.value = "all";
+  $("topic-count-hint").textContent = query ? `${matchCount} matching topics` : `${matchCount} topics available`;
   updateLOPreview();
 }
 
@@ -339,8 +378,7 @@ function updateLOPreview() {
   $("lo-summary-text").textContent = `JSMU Learning Objectives (${los.length})`;
   const list = $("lo-list");
   list.innerHTML = "";
-  const previewSlice = los.slice(0, 40);
-  previewSlice.forEach((item) => {
+  los.slice(0, 40).forEach((item) => {
     const li = document.createElement("li");
     li.textContent = `${item.topic}: ${item.lo}`;
     list.appendChild(li);
@@ -358,13 +396,8 @@ function bindConfigEvents() {
     showScreen("screen-config");
   });
 
-  $("select-module").addEventListener("change", (e) => {
-    state.config.moduleId = e.target.value;
-    populateSubjects();
-  });
-
-  $("select-subject").addEventListener("change", (e) => {
-    state.config.subjectId = e.target.value;
+  $("topic-search").addEventListener("input", (e) => {
+    state.config.topicQuery = e.target.value;
     populateTopics();
   });
 
@@ -375,18 +408,17 @@ function bindConfigEvents() {
 
   bindGroup("source-group", ".seg-btn", (val) => {
     state.config.source = val;
+    playTone("click");
   });
 
-  bindGroup("mode-group", ".seg-btn", (val) => {
+  bindGroup("mode-group", ".mode-card", (val) => {
     state.config.mode = val;
-    $("mode-hint").textContent =
-      val === "practice"
-        ? "Practice Mode: Instant reveal + distractor breakdown after every question."
-        : "Exam Mode: 1 minute per MCQ countdown. Results & review shown at the end.";
+    playTone("click");
   });
 
   bindGroup("length-group", ".pill", (val) => {
     state.config.length = Number(val);
+    playTone("click");
   });
 
   $("saved-mistakes-btn").addEventListener("click", () => {
@@ -398,16 +430,41 @@ function bindConfigEvents() {
 
   $("config-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const btn = $("start-btn");
-    btn.disabled = true;
-    btn.textContent = "Loading MCQs…";
-    try {
-      const questions = await fetchSessionQuestions(state.config);
-      startSession(questions, state.config.mode);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = 'Start Quiz <span aria-hidden="true">→</span>';
+    await launchConfiguredQuiz();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if ($("screen-config").classList.contains("active") && (e.ctrlKey || e.metaKey) && e.key === "Enter") {
+      e.preventDefault();
+      launchConfiguredQuiz();
     }
+  });
+}
+
+async function launchConfiguredQuiz() {
+  const btn = $("start-btn");
+  btn.disabled = true;
+  btn.innerHTML =
+    state.config.source === "ai" || state.config.source === "mixed"
+      ? "Generating &amp; Loading…"
+      : "Loading MCQs…";
+  try {
+    const questions = await fetchSessionQuestions(state.config);
+    startSession(questions, state.config.mode);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Start Quiz <span class="arrow" aria-hidden="true">→</span>';
+  }
+}
+
+function bindGroup(containerId, selector, onSelect) {
+  const container = $(containerId);
+  container.addEventListener("click", (e) => {
+    const btn = e.target.closest(selector);
+    if (!btn) return;
+    container.querySelectorAll(selector).forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    onSelect(btn.dataset.value);
   });
 }
 
@@ -423,86 +480,55 @@ async function fetchSessionQuestions(cfg) {
     const res = await fetch(`/api/questions?${params.toString()}`);
     if (res.ok) {
       const data = await res.json();
+      if (cfg.source === "ai" && data.ai_used > 0) {
+        showToast(`✨ Generated ${data.ai_used} fresh UMDC-grounded BCQs`);
+      } else if (cfg.source === "ai" && !data.ai_configured) {
+        showToast("AI keys not configured — loaded Past Bank instead");
+      }
       if (Array.isArray(data.questions) && data.questions.length > 0) {
         return data.questions;
       }
     }
   } catch {
-    // Fallback to local seed/LO questions if backend unavailable
+    // Fallback below
   }
   return buildSessionQuestions(cfg);
 }
 
-function bindGroup(containerId, selector, onSelect) {
-  const container = $(containerId);
-  container.addEventListener("click", (e) => {
-    const btn = e.target.closest(selector);
-    if (!btn) return;
-    container.querySelectorAll(selector).forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    onSelect(btn.dataset.value);
-  });
-}
-
-// --- Phase 1 Question Assembly (Seed + LO-locked placeholder until Phase 2 API) ---
 function buildSessionQuestions(cfg, overrideTopics = null) {
-  const mod = state.syllabus.modules.find((m) => m.id === cfg.moduleId);
-  const matchingSeeds = SEED_QUESTIONS.filter((q) => {
-    if (q.module !== cfg.moduleId) return false;
-    if (cfg.subjectId !== "all" && q.subject.toLowerCase() !== cfg.subjectId) return false;
-    if (cfg.source === "past" && q.source !== "Past Bank") return false;
-    if (cfg.source === "ai" && q.source !== "AI Fresh BCQ") return false;
-    return true;
-  });
-
+  const mod = state.syllabus?.modules.find((m) => m.id === cfg.moduleId);
   const los = getSelectedLOs();
-  const filteredLOs = overrideTopics
-    ? los.filter((item) => overrideTopics.includes(item.topic))
-    : los;
+  const filteredLOs = overrideTopics ? los.filter((i) => overrideTopics.includes(i.topic)) : los;
   const poolLOs = filteredLOs.length ? filteredLOs : los;
 
-  const questions = [...matchingSeeds];
+  const questions = SEED_QUESTIONS.filter((q) => q.module === cfg.moduleId);
   let idx = 0;
   while (questions.length < cfg.length && poolLOs.length > 0) {
     const item = poolLOs[idx % poolLOs.length];
-    const sourceLabel =
-      cfg.source === "ai"
-        ? "AI Fresh BCQ"
-        : cfg.source === "past"
-        ? "Past Bank"
-        : idx % 2 === 0
-        ? "Past Bank"
-        : "AI Fresh BCQ";
-
     questions.push({
       id: `lo-preview-${idx + 1}`,
       module: cfg.moduleId,
       subject: item.subject,
       topic: item.topic,
-      source: `${sourceLabel} (Phase 1 Preview)`,
-      stem: `[${mod?.name || cfg.moduleId} · ${item.subject}] Syllabus-locked check for "${item.topic}": Which statement best aligns with the JSMU Learning Objective "${item.lo}"?`,
+      source: "Past Bank",
+      stem: `[${mod?.name || cfg.moduleId} · ${item.subject}] Syllabus-locked check for "${item.topic}": Which statement best aligns with "${item.lo}"?`,
       options: [
         `Primary mechanism & clinical correlation of ${item.lo}`,
-        `Unrelated histological artifact outside ${item.topic}`,
-        `Contradictory physiological response not seen in ${item.subject}`,
-        `Out-of-syllabus pathology from later clinical years`
+        `Unrelated artifact outside ${item.topic}`,
+        `Contradictory finding not seen in ${item.subject}`,
+        `Out-of-syllabus pathology from later clinical years`,
       ],
       correctIndex: 0,
-      concept: `Phase 1 syllabus-locked placeholder mapped directly to JSMU LO: "${item.lo}". Full Past Bank & AI BCQs connect in Phase 2–3.`,
-      distractors: [
-        `B: Excluded because it lies outside ${item.topic}.`,
-        `C: Contradicts normal ${item.subject} principles.`,
-        `D: Out of 1st-year MBBS scope.`
-      ],
-      loRef: `JSMU ${mod?.name || ""} · ${item.subject} · ${item.topic}`
+      concept: `Mapped directly to JSMU LO: "${item.lo}".`,
+      distractors: [],
+      loRef: `JSMU ${mod?.name || ""} · ${item.subject}`,
     });
     idx++;
   }
-
   return questions.slice(0, cfg.length);
 }
 
-// --- Screen 2: Quiz Arena ---
+// --- Screen 2: Interactive Quiz Arena ---
 function startSession(questions, mode) {
   stopTimer();
   state.config.mode = mode;
@@ -510,15 +536,17 @@ function startSession(questions, mode) {
     questions,
     currentIndex: 0,
     answers: new Array(questions.length).fill(null),
+    flagged: new Array(questions.length).fill(false),
     streak: 0,
     bestStreak: 0,
     timerSeconds: mode === "exam" ? questions.length * 60 : 0,
     timerId: null,
     questionStartMs: Date.now(),
-    timingsMs: []
+    timingsMs: [],
   };
 
   showScreen("screen-arena");
+  renderQuestionDots();
   renderQuestion();
   startTimer();
 }
@@ -557,38 +585,104 @@ function updateTimerDisplay() {
   el.classList.toggle("urgent", state.config.mode === "exam" && s <= 60);
 }
 
+function renderQuestionDots() {
+  const container = $("q-dots");
+  container.innerHTML = "";
+  const { questions, currentIndex, answers, flagged } = state.session;
+  questions.forEach((q, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "q-dot";
+    dot.title = `Question ${i + 1}`;
+    if (i === currentIndex) dot.classList.add("current");
+    else if (answers[i] !== null) {
+      if (state.config.mode === "practice") {
+        dot.classList.add(answers[i] === q.correctIndex ? "correct" : "wrong");
+      } else {
+        dot.classList.add("answered");
+      }
+    }
+    if (flagged[i]) dot.classList.add("flagged");
+
+    dot.addEventListener("click", () => {
+      if (state.config.mode === "exam" || answers[i] !== null || i === currentIndex) {
+        state.session.currentIndex = i;
+        renderQuestion();
+      }
+    });
+    container.appendChild(dot);
+  });
+}
+
 function renderQuestion() {
-  const { questions, currentIndex, streak } = state.session;
+  const { questions, currentIndex, answers, flagged, streak } = state.session;
   const q = questions[currentIndex];
   const total = questions.length;
+  const answeredCount = answers.filter((a) => a !== null).length;
 
   $("hud-counter").textContent = `${currentIndex + 1} / ${total}`;
   $("hud-streak").textContent = `🔥 ${streak}`;
-  const pct = Math.round(((currentIndex) / total) * 100);
+  const pct = Math.round((answeredCount / total) * 100);
   $("progress-fill").style.width = `${pct}%`;
   $("progress-track").setAttribute("aria-valuenow", String(pct));
 
   $("q-subject-badge").textContent = q.subject;
-  $("q-source-badge").textContent = q.source;
+  const srcBadge = $("q-source-badge");
+  srcBadge.textContent = q.source;
+  srcBadge.classList.toggle("ai", String(q.source).includes("AI"));
   $("q-topic-label").textContent = q.topic;
   $("q-stem").textContent = q.stem;
+
+  const isFlagged = Boolean(flagged[currentIndex]);
+  $("flag-btn").classList.toggle("flagged", isFlagged);
+  $("flag-label").textContent = isFlagged ? "Flagged" : "Flag";
 
   const list = $("options-list");
   list.innerHTML = "";
   const letters = ["A", "B", "C", "D"];
+  const picked = answers[currentIndex];
+
   q.options.forEach((optText, i) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "option-btn";
     btn.dataset.index = String(i);
-    btn.innerHTML = `<span class="option-key">${letters[i]}</span><span>${escapeHtml(optText)}</span>`;
+    let badgeChar = letters[i];
+
+    if (picked !== null) {
+      if (state.config.mode === "practice") {
+        btn.disabled = true;
+        if (i === q.correctIndex) {
+          btn.classList.add("correct");
+          badgeChar = "✓";
+        } else if (i === picked) {
+          btn.classList.add("wrong");
+          badgeChar = "✕";
+        }
+      } else if (i === picked) {
+        btn.classList.add("selected");
+      }
+    }
+
+    btn.innerHTML = `<span class="option-key">${badgeChar}</span><span>${escapeHtml(optText)}</span>`;
     btn.addEventListener("click", () => selectOption(i));
     list.appendChild(btn);
   });
 
-  $("why-card").classList.add("hidden");
-  $("next-btn").disabled = true;
+  if (state.config.mode === "practice" && picked !== null) {
+    showWhyCard(q, picked === q.correctIndex);
+  } else {
+    $("why-card").classList.add("hidden");
+  }
+
+  const prevBtn = $("prev-btn");
+  prevBtn.classList.toggle("hidden", state.config.mode !== "exam");
+  prevBtn.disabled = currentIndex === 0;
+
+  $("next-btn").disabled = picked === null && state.config.mode === "practice";
   $("next-btn").textContent = currentIndex === total - 1 ? "Finish Session →" : "Next Question →";
+
+  renderQuestionDots();
   state.session.questionStartMs = Date.now();
 }
 
@@ -596,13 +690,11 @@ function selectOption(chosenIdx) {
   const { questions, currentIndex, answers } = state.session;
   const q = questions[currentIndex];
 
-  // In Practice Mode, lock answer after first pick
   if (state.config.mode === "practice" && answers[currentIndex] !== null) {
     return;
   }
 
-  const elapsed = Date.now() - state.session.questionStartMs;
-  state.session.timingsMs[currentIndex] = elapsed;
+  state.session.timingsMs[currentIndex] = Date.now() - state.session.questionStartMs;
   answers[currentIndex] = chosenIdx;
 
   const buttons = $("options-list").querySelectorAll(".option-btn");
@@ -612,43 +704,90 @@ function selectOption(chosenIdx) {
     if (isCorrect) {
       state.session.streak++;
       state.session.bestStreak = Math.max(state.session.bestStreak, state.session.streak);
+      playTone("correct");
+      const streakEl = $("hud-streak");
+      streakEl.classList.remove("pop");
+      void streakEl.offsetWidth;
+      streakEl.classList.add("pop");
     } else {
       state.session.streak = 0;
+      playTone("wrong");
     }
     $("hud-streak").textContent = `🔥 ${state.session.streak}`;
 
     buttons.forEach((b, i) => {
       b.disabled = true;
-      if (i === q.correctIndex) b.classList.add("correct");
-      else if (i === chosenIdx) b.classList.add("wrong");
+      const keyEl = b.querySelector(".option-key");
+      if (i === q.correctIndex) {
+        b.classList.add("correct");
+        keyEl.textContent = "✓";
+      } else if (i === chosenIdx) {
+        b.classList.add("wrong");
+        keyEl.textContent = "✕";
+      }
     });
 
-    showWhyCard(q);
+    showWhyCard(q, isCorrect);
   } else {
-    buttons.forEach((b, i) => {
-      b.classList.toggle("selected", i === chosenIdx);
-    });
+    playTone("click");
+    buttons.forEach((b, i) => b.classList.toggle("selected", i === chosenIdx));
   }
 
+  const answeredCount = answers.filter((a) => a !== null).length;
+  const pct = Math.round((answeredCount / questions.length) * 100);
+  $("progress-fill").style.width = `${pct}%`;
+
   $("next-btn").disabled = false;
+  renderQuestionDots();
 }
 
-function showWhyCard(q) {
+function showWhyCard(q, isCorrect) {
+  const card = $("why-card");
+  card.classList.remove("correct-state", "wrong-state");
+  card.classList.add(isCorrect ? "correct-state" : "wrong-state");
+
+  $("why-verdict").textContent = isCorrect ? "✓ Spot On · Core Concept" : "✕ Missed · Lock This Concept";
   $("why-ref").textContent = q.loRef || "";
-  $("why-concept").textContent = q.concept || "";
+
+  const fullConcept = q.concept || "";
+  const trickMarker = "— Memory trick:";
+  const trickEl = $("why-trick");
+  if (fullConcept.includes(trickMarker)) {
+    const [mainPart, trickPart] = fullConcept.split(trickMarker);
+    $("why-concept").textContent = mainPart.trim();
+    trickEl.textContent = `💡 Memory Trick: ${trickPart.trim()}`;
+    trickEl.classList.remove("hidden");
+  } else {
+    $("why-concept").textContent = fullConcept;
+    trickEl.classList.add("hidden");
+  }
+
   const list = $("why-distractors");
   list.innerHTML = "";
-  (q.distractors || []).forEach((d) => {
+  const distractors = q.distractors || [];
+  list.classList.toggle("hidden", distractors.length === 0);
+  distractors.forEach((d) => {
     const li = document.createElement("li");
     li.textContent = d;
     list.appendChild(li);
   });
-  $("why-card").classList.remove("hidden");
+
+  card.classList.remove("hidden");
+}
+
+function toggleFlag() {
+  const i = state.session.currentIndex;
+  state.session.flagged[i] = !state.session.flagged[i];
+  const isFlagged = state.session.flagged[i];
+  $("flag-btn").classList.toggle("flagged", isFlagged);
+  $("flag-label").textContent = isFlagged ? "Flagged" : "Flag";
+  playTone("click");
+  renderQuestionDots();
 }
 
 function advanceQuestion() {
-  const { currentIndex, questions } = state.session;
-  if (state.session.answers[currentIndex] === null) return;
+  const { currentIndex, questions, answers } = state.session;
+  if (state.config.mode === "practice" && answers[currentIndex] === null) return;
   if (currentIndex < questions.length - 1) {
     state.session.currentIndex++;
     renderQuestion();
@@ -659,12 +798,18 @@ function advanceQuestion() {
 
 function bindArenaEvents() {
   $("next-btn").addEventListener("click", advanceQuestion);
+  $("prev-btn").addEventListener("click", () => {
+    if (state.session.currentIndex > 0) {
+      state.session.currentIndex--;
+      renderQuestion();
+    }
+  });
+  $("flag-btn").addEventListener("click", toggleFlag);
   $("quit-btn").addEventListener("click", () => {
     stopTimer();
     showScreen("screen-config");
   });
 
-  // Keyboard hotkeys (1-4, A-D, Enter)
   document.addEventListener("keydown", (e) => {
     if (!$("screen-arena").classList.contains("active")) return;
     const key = e.key.toLowerCase();
@@ -672,13 +817,15 @@ function bindArenaEvents() {
     if (key in map) {
       e.preventDefault();
       selectOption(map[key]);
+    } else if (key === "f") {
+      e.preventDefault();
+      toggleFlag();
     } else if (e.key === "Enter" && !$("next-btn").disabled) {
       e.preventDefault();
       advanceQuestion();
     }
   });
 
-  // Mobile swipe left for next
   let touchStartX = 0;
   $("question-card").addEventListener("touchstart", (e) => {
     touchStartX = e.changedTouches[0].screenX;
@@ -687,22 +834,29 @@ function bindArenaEvents() {
     const dx = e.changedTouches[0].screenX - touchStartX;
     if (dx < -60 && !$("next-btn").disabled) {
       advanceQuestion();
+    } else if (dx > 60 && state.config.mode === "exam" && state.session.currentIndex > 0) {
+      state.session.currentIndex--;
+      renderQuestion();
     }
   }, { passive: true });
 }
 
-// --- Screen 3: Verdict & Mistake Loop ---
+// --- Screen 3: Session Verdict & Mistake Loop ---
 function finishSession() {
   stopTimer();
-  const { questions, answers, timingsMs, bestStreak } = state.session;
+  const { questions, answers, flagged, timingsMs, bestStreak } = state.session;
 
   let correct = 0;
   let computedStreak = 0;
   let maxStreak = bestStreak;
   const wrongQuestions = [];
-  const weakTopicCounts = {};
+  const topicStats = {};
 
   questions.forEach((q, i) => {
+    const t = q.topic || "General";
+    if (!topicStats[t]) topicStats[t] = { total: 0, missed: 0 };
+    topicStats[t].total++;
+
     if (answers[i] === q.correctIndex) {
       correct++;
       computedStreak++;
@@ -710,16 +864,18 @@ function finishSession() {
     } else {
       computedStreak = 0;
       wrongQuestions.push(q);
-      weakTopicCounts[q.topic] = (weakTopicCounts[q.topic] || 0) + 1;
+      topicStats[t].missed++;
     }
   });
 
+  // Persist mistakes & cumulative stats
   const wrongIds = new Set(wrongQuestions.map((q) => q.id));
   const correctIds = new Set(
     questions.filter((_, i) => answers[i] === questions[i].correctIndex).map((q) => q.id)
   );
   const existing = loadSavedMistakes().filter((q) => !correctIds.has(q.id) && !wrongIds.has(q.id));
   saveMistakes([...wrongQuestions, ...existing]);
+  recordSessionStats(questions.length, maxStreak);
 
   const total = questions.length;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
@@ -730,22 +886,85 @@ function finishSession() {
 
   $("verdict-accuracy").textContent = `${accuracy}%`;
   $("verdict-score").textContent = `${correct} / ${total}`;
-  $("verdict-avg-time").textContent = `${avgSec}s`;
+  $("verdict-avg-time").textContent = `${avgSec}s / Q`;
   $("verdict-streak").textContent = `🔥 ${maxStreak}`;
   $("verdict-wrong-count").textContent = String(wrongQuestions.length);
 
+  // Animate SVG progress ring (circumference = 2 * pi * 52 = 326.7)
+  const ring = $("ring-fg");
+  const color = accuracy >= 75 ? "var(--success)" : accuracy >= 50 ? "var(--warning)" : "var(--danger)";
+  ring.style.stroke = color;
+  ring.style.strokeDashoffset = "326.7";
+  requestAnimationFrame(() => {
+    ring.style.strokeDashoffset = String(326.7 * (1 - accuracy / 100));
+  });
+
+  if (accuracy >= 80) {
+    $("verdict-tier").textContent = "Proff-Ready Distinction";
+    $("verdict-heading").textContent = "Outstanding Precision!";
+    $("verdict-subtitle").textContent = "You locked down the core JSMU concepts in this drill.";
+  } else if (accuracy >= 55) {
+    $("verdict-tier").textContent = "Solid Momentum";
+    $("verdict-heading").textContent = "Good Run — Tighten Weak Spots";
+    $("verdict-subtitle").textContent = "Use Retry Wrong MCQs below to turn missed concepts into easy marks.";
+  } else {
+    $("verdict-tier").textContent = "Warm-Up Drill";
+    $("verdict-heading").textContent = "Review & Lock the Missed LOs";
+    $("verdict-subtitle").textContent = "Every miss is saved in your Mistake Bank until you nail it.";
+  }
+
+  // Weak topic progress bars
   const weakList = $("weak-topics-list");
   weakList.innerHTML = "";
-  const weakEntries = Object.entries(weakTopicCounts).sort((a, b) => b[1] - a[1]);
+  const weakEntries = Object.entries(topicStats)
+    .filter(([, s]) => s.missed > 0)
+    .sort((a, b) => b[1].missed - a[1].missed);
+
   if (weakEntries.length === 0) {
-    weakList.innerHTML = "<li>Zero mistakes — clean sweep!</li>";
+    weakList.innerHTML = `<div class="weak-bar-row"><div class="weak-bar-head"><span>All topics mastered</span><span>100%</span></div><div class="weak-bar-track"><div class="weak-bar-fill" style="width:100%;background:var(--success)"></div></div></div>`;
   } else {
-    weakEntries.forEach(([topic, count]) => {
-      const li = document.createElement("li");
-      li.textContent = `${topic} — ${count} missed`;
-      weakList.appendChild(li);
+    weakEntries.forEach(([topic, st]) => {
+      const pctMissed = Math.round((st.missed / st.total) * 100);
+      const row = document.createElement("div");
+      row.className = "weak-bar-row";
+      row.innerHTML = `
+        <div class="weak-bar-head">
+          <span>${escapeHtml(topic)}</span>
+          <span>${st.missed} / ${st.total} missed</span>
+        </div>
+        <div class="weak-bar-track">
+          <div class="weak-bar-fill" style="width:${pctMissed}%"></div>
+        </div>
+      `;
+      weakList.appendChild(row);
     });
   }
+
+  // Full Answer Review Accordion
+  $("review-count-badge").textContent = `${total} Qs`;
+  const reviewList = $("review-list");
+  reviewList.innerHTML = "";
+  const letters = ["A", "B", "C", "D"];
+  questions.forEach((q, i) => {
+    const picked = answers[i];
+    const isOk = picked === q.correctIndex;
+    const item = document.createElement("div");
+    item.className = `review-item ${isOk ? "is-correct" : "is-wrong"}`;
+    const pickedText = picked !== null ? `${letters[picked]}. ${q.options[picked]}` : "Not answered";
+    const rightText = `${letters[q.correctIndex]}. ${q.options[q.correctIndex]}`;
+    item.innerHTML = `
+      <div class="review-item-head">
+        <span>Q${i + 1}. ${isOk ? "✓ Correct" : "✕ Missed"} ${flagged[i] ? "🚩" : ""}</span>
+        <span>${escapeHtml(q.topic)}</span>
+      </div>
+      <div>${escapeHtml(q.stem)}</div>
+      <div class="review-item-ans">
+        Your pick: <strong>${escapeHtml(pickedText)}</strong> · Correct: <strong>${escapeHtml(rightText)}</strong>
+      </div>
+      <p class="review-item-concept">${escapeHtml(q.concept || "")}</p>
+    `;
+    reviewList.appendChild(item);
+  });
 
   $("retry-wrong-btn").disabled = wrongQuestions.length === 0;
   $("retry-wrong-btn").onclick = () => {
@@ -789,7 +1008,7 @@ function showScreen(id) {
 }
 
 function escapeHtml(str) {
-  return str
+  return String(str)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")

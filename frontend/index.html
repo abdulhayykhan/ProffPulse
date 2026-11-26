@@ -6,20 +6,50 @@
   <title>ProffPulse — 1st-Year MBBS MCQ Arena</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Ambient Background Glows -->
+  <div class="bg-ambient" aria-hidden="true">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+  </div>
+
   <div class="app-shell">
     <!-- Top Brand Bar -->
     <header class="topbar">
       <div class="brand" id="brand-home" role="button" tabindex="0" title="Back to Configurator">
-        <span class="brand-pulse" aria-hidden="true"></span>
-        <span class="brand-name">ProffPulse</span>
-        <span class="brand-tag">1st-Year MBBS · JSMU / UMDC</span>
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 36 24" fill="none" class="ecg-svg">
+            <path class="ecg-track" d="M1 12h7l3-8 4 16 4-12 3 4h13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            <path class="ecg-pulse" d="M1 12h7l3-8 4 16 4-12 3 4h13" stroke="url(#ecgGrad)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="ecgGrad" x1="0" y1="0" x2="36" y2="0" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#38bdf8" />
+                <stop offset="1" stop-color="#22d3ee" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <div class="brand-title-row">
+            <span class="brand-name">ProffPulse</span>
+            <span class="brand-tag">1st-Year MBBS · JSMU / UMDC</span>
+          </div>
+        </div>
       </div>
+
       <div class="topbar-meta">
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
+        <div class="momentum-pill" id="momentum-pill" title="Your cumulative local study stats">
+          <span id="total-solved-badge">✓ 0 solved</span>
+          <span class="sep">·</span>
+          <span id="best-streak-badge">🔥 0 best</span>
+        </div>
+        <button class="icon-btn" id="sound-toggle" type="button" aria-label="Toggle sound effects" title="Sound effects">
+          <span id="sound-icon">🔊</span>
+        </button>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">
           <span id="theme-icon">☀️</span>
         </button>
       </div>
@@ -28,79 +58,114 @@
     <!-- SCREEN 1: QUIZ CONFIGURATOR -->
     <main id="screen-config" class="screen active" aria-labelledby="config-heading">
       <section class="hero">
-        <h1 id="config-heading">10-Second Start. <span class="accent">Syllabus-Locked.</span></h1>
-        <p class="subtitle">Pick your JSMU module, subject, and topic — solve verified past papers &amp; UMDC-grounded clinical BCQs.</p>
+        <div class="hero-pill">
+          <span class="live-dot" id="ai-status-dot"></span>
+          <span id="hero-status-text">681 Verified Past Bank MCQs · 208 UMDC Lecture Sources</span>
+        </div>
+        <h1 id="config-heading">10-Second Start. <span class="gradient-text">Syllabus-Locked.</span></h1>
+        <p class="subtitle">Choose a JSMU module, filter by subject or topic, and drill past papers &amp; UMDC-grounded clinical BCQs.</p>
       </section>
 
       <form id="config-form" class="card config-card">
-        <!-- Cascading Curriculum Filters -->
-        <div class="grid-3">
-          <div class="field">
-            <label for="select-module">Module</label>
-            <select id="select-module" required></select>
+        <!-- Step 1: Visual Module Cards -->
+        <div class="section-block">
+          <div class="section-head">
+            <span class="field-label">1. Select Module</span>
+            <span class="section-sub" id="module-meta-hint">6 JSMU Modules</span>
           </div>
-          <div class="field">
-            <label for="select-subject">Subject</label>
-            <select id="select-subject" required></select>
-          </div>
-          <div class="field">
-            <label for="select-topic">Topic</label>
-            <select id="select-topic" required></select>
-          </div>
+          <div class="module-grid" id="module-grid" role="radiogroup" aria-label="Module"></div>
         </div>
 
-        <!-- JSMU Learning Objectives Preview -->
-        <details class="lo-preview" id="lo-preview">
-          <summary>
-            <span id="lo-summary-text">JSMU Learning Objectives (0)</span>
-            <span class="lo-badge">Syllabus Locked</span>
-          </summary>
-          <ul id="lo-list" class="lo-list"></ul>
-        </details>
+        <!-- Step 2: Subject Chips + Searchable Topic -->
+        <div class="section-block">
+          <div class="section-head">
+            <span class="field-label">2. Subject &amp; Topic</span>
+            <span class="section-sub" id="topic-count-hint">All subjects</span>
+          </div>
 
-        <!-- Source & Mode Toggles -->
+          <div class="chip-row" id="subject-chips" role="radiogroup" aria-label="Subject"></div>
+
+          <div class="topic-picker-row">
+            <div class="search-wrap">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input type="search" id="topic-search" placeholder="Filter topics (e.g. Brachial, Heart, Heme, Surah)…" autocomplete="off" />
+            </div>
+            <select id="select-topic" aria-label="Topic"></select>
+          </div>
+
+          <details class="lo-preview" id="lo-preview">
+            <summary>
+              <span class="lo-summary-left">
+                <span class="lo-chevron" aria-hidden="true">▸</span>
+                <span id="lo-summary-text">JSMU Learning Objectives (0)</span>
+              </span>
+              <span class="lo-badge">Syllabus Locked</span>
+            </summary>
+            <ul id="lo-list" class="lo-list"></ul>
+          </details>
+        </div>
+
+        <!-- Step 3: Source & Mode Cards -->
         <div class="grid-2">
           <div class="field">
-            <span class="field-label">Question Source</span>
+            <span class="field-label">3. Question Source</span>
             <div class="segmented" role="group" aria-label="Question Source" id="source-group">
-              <button type="button" class="seg-btn active" data-value="mixed">Mixed</button>
-              <button type="button" class="seg-btn" data-value="past">Past &amp; Cracked</button>
-              <button type="button" class="seg-btn" data-value="ai">AI Fresh BCQs</button>
+              <button type="button" class="seg-btn active" data-value="mixed">
+                <span>🔀 Mixed</span>
+              </button>
+              <button type="button" class="seg-btn" data-value="past">
+                <span>📚 Past Bank</span>
+              </button>
+              <button type="button" class="seg-btn" data-value="ai">
+                <span>✨ AI BCQs</span>
+              </button>
             </div>
           </div>
 
           <div class="field">
-            <span class="field-label">Mode</span>
-            <div class="segmented" role="group" aria-label="Quiz Mode" id="mode-group">
-              <button type="button" class="seg-btn active" data-value="practice" title="Instant answer reveal &amp; Why card">
-                Practice Mode
-              </button>
-              <button type="button" class="seg-btn" data-value="exam" title="1 min/MCQ countdown, verdict at end">
-                Exam Mode
-              </button>
+            <span class="field-label">4. Session Length</span>
+            <div class="pills" role="group" aria-label="Session Length" id="length-group">
+              <button type="button" class="pill active" data-value="10">10</button>
+              <button type="button" class="pill" data-value="20">20</button>
+              <button type="button" class="pill" data-value="30">30</button>
+              <button type="button" class="pill" data-value="50">50</button>
             </div>
           </div>
         </div>
 
-        <!-- Length Pills -->
+        <!-- Mode Selector Cards -->
         <div class="field">
-          <span class="field-label">Session Length</span>
-          <div class="pills" role="group" aria-label="Session Length" id="length-group">
-            <button type="button" class="pill active" data-value="10">10 MCQs</button>
-            <button type="button" class="pill" data-value="20">20 MCQs</button>
-            <button type="button" class="pill" data-value="30">30 MCQs</button>
-            <button type="button" class="pill" data-value="50">50 MCQs</button>
+          <span class="field-label">5. Study Mode</span>
+          <div class="mode-cards" role="radiogroup" aria-label="Quiz Mode" id="mode-group">
+            <button type="button" class="mode-card active" data-value="practice">
+              <div class="mode-card-top">
+                <span class="mode-icon">⚡</span>
+                <span class="mode-name">Practice Mode</span>
+                <span class="mode-badge">Instant Feedback</span>
+              </div>
+              <p class="mode-desc">Immediate answer reveal, core concept &amp; distractor breakdown after every question.</p>
+            </button>
+            <button type="button" class="mode-card" data-value="exam">
+              <div class="mode-card-top">
+                <span class="mode-icon">⏱️</span>
+                <span class="mode-name">Exam Mode</span>
+                <span class="mode-badge">Timed · 1 min/Q</span>
+              </div>
+              <p class="mode-desc">Simulate Proff conditions with countdown timer, question flagging &amp; full verdict review.</p>
+            </button>
           </div>
         </div>
 
         <div class="config-footer">
-          <p class="mode-hint" id="mode-hint">Practice Mode: Instant reveal + distractor breakdown after every question.</p>
+          <div class="footer-left">
+            <span class="shortcut-tip">Tip: Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to launch</span>
+          </div>
           <div class="config-cta-group">
             <button type="button" class="btn btn-secondary hidden" id="saved-mistakes-btn">
-              Review Mistakes (<span id="saved-mistakes-count">0</span>)
+              🔁 Review Mistakes (<span id="saved-mistakes-count">0</span>)
             </button>
-            <button type="submit" class="btn btn-primary btn-lg" id="start-btn">
-              Start Quiz <span aria-hidden="true">→</span>
+            <button type="submit" class="btn btn-primary btn-lg btn-glow" id="start-btn">
+              Start Quiz <span class="arrow" aria-hidden="true">→</span>
             </button>
           </div>
         </div>
@@ -112,24 +177,32 @@
       <!-- Live HUD -->
       <div class="hud">
         <div class="hud-top">
-          <button type="button" class="btn-ghost" id="quit-btn" title="Exit session">← Exit</button>
+          <button type="button" class="btn-ghost" id="quit-btn" title="Exit session">← Configurator</button>
           <div class="hud-stats">
             <span class="hud-chip" id="hud-counter">1 / 10</span>
             <span class="hud-chip streak-chip" id="hud-streak" title="Current streak">🔥 0</span>
             <span class="hud-chip timer-chip" id="hud-timer">00:00</span>
           </div>
         </div>
+
         <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
           <div class="progress-fill" id="progress-fill"></div>
         </div>
+
+        <div class="q-dots" id="q-dots" aria-label="Question navigator"></div>
       </div>
 
       <!-- Question Card -->
       <article class="card question-card" id="question-card">
         <div class="q-meta">
-          <span class="badge" id="q-subject-badge">Anatomy</span>
-          <span class="badge badge-muted" id="q-source-badge">Past Bank</span>
-          <span class="q-topic-label" id="q-topic-label">Topic</span>
+          <div class="q-badges">
+            <span class="badge" id="q-subject-badge">Anatomy</span>
+            <span class="badge badge-source" id="q-source-badge">Past Bank</span>
+            <span class="q-topic-label" id="q-topic-label">Topic</span>
+          </div>
+          <button type="button" class="flag-btn" id="flag-btn" title="Flag question (F)">
+            <span>🚩</span> <span id="flag-label">Flag</span>
+          </button>
         </div>
 
         <h2 class="q-stem" id="q-stem">Loading question…</h2>
@@ -139,18 +212,24 @@
         <!-- Instant "Why?" Card (Practice Mode) -->
         <section class="why-card hidden" id="why-card" aria-label="Explanation">
           <div class="why-header">
-            <span class="why-title">Why? · Core Concept &amp; Distractor Breakdown</span>
+            <span class="why-verdict" id="why-verdict">Core Concept</span>
             <span class="why-ref" id="why-ref"></span>
           </div>
           <p class="why-concept" id="why-concept"></p>
+          <div class="why-trick hidden" id="why-trick"></div>
           <ul class="why-distractors" id="why-distractors"></ul>
         </section>
 
         <div class="arena-actions">
-          <span class="hotkey-hint">Keys: <kbd>A–D</kbd> or <kbd>1–4</kbd> to answer · <kbd>Enter</kbd> for next</span>
-          <button type="button" class="btn btn-primary" id="next-btn" disabled>
-            Next Question →
-          </button>
+          <span class="hotkey-hint">
+            <kbd>A–D</kbd> / <kbd>1–4</kbd> answer · <kbd>F</kbd> flag · <kbd>Enter</kbd> next
+          </span>
+          <div class="arena-nav-btns">
+            <button type="button" class="btn btn-secondary hidden" id="prev-btn">← Prev</button>
+            <button type="button" class="btn btn-primary" id="next-btn" disabled>
+              Next Question →
+            </button>
+          </div>
         </div>
       </article>
     </main>
@@ -159,50 +238,70 @@
     <main id="screen-verdict" class="screen" aria-labelledby="verdict-heading">
       <section class="card verdict-card">
         <div class="verdict-hero">
-          <div class="score-ring" id="score-ring">
-            <span class="score-pct" id="verdict-accuracy">0%</span>
-            <span class="score-sub" id="verdict-score">0 / 0</span>
+          <div class="ring-wrap" id="ring-wrap">
+            <svg class="score-svg" viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="52" />
+              <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="ring-center">
+              <span class="score-pct" id="verdict-accuracy">0%</span>
+              <span class="score-sub" id="verdict-score">0 / 0</span>
+            </div>
           </div>
-          <div>
-            <h2 id="verdict-heading">Session Complete</h2>
-            <p class="subtitle" id="verdict-subtitle">Here is your performance breakdown.</p>
+
+          <div class="verdict-copy">
+            <span class="verdict-tier" id="verdict-tier">Session Complete</span>
+            <h2 id="verdict-heading">Solid Effort</h2>
+            <p class="subtitle" id="verdict-subtitle">Review your weak topics or drill missed questions right away.</p>
           </div>
         </div>
 
         <div class="stats-grid">
           <div class="stat-box">
-            <span class="stat-label">Avg Time / MCQ</span>
-            <span class="stat-val" id="verdict-avg-time">0s</span>
+            <span class="stat-label">Avg Pace</span>
+            <span class="stat-val" id="verdict-avg-time">0s / Q</span>
           </div>
           <div class="stat-box">
             <span class="stat-label">Best Streak</span>
             <span class="stat-val" id="verdict-streak">🔥 0</span>
           </div>
           <div class="stat-box">
-            <span class="stat-label">Wrong / Skipped</span>
+            <span class="stat-label">Missed / Flagged</span>
             <span class="stat-val" id="verdict-wrong-count">0</span>
           </div>
         </div>
 
         <div class="weak-topics" id="weak-topics-section">
-          <h3>Weak Topic Highlights</h3>
-          <ul id="weak-topics-list" class="weak-list"></ul>
+          <h3>Topic Breakdown</h3>
+          <div id="weak-topics-list" class="weak-bars"></div>
         </div>
 
         <div class="verdict-actions">
           <button type="button" class="btn btn-warning" id="retry-wrong-btn">
-            Retry Wrong MCQs
+            🔁 Retry Wrong MCQs
           </button>
           <button type="button" class="btn btn-primary" id="practice-weak-btn">
-            Practice Weak Topics (10 BCQs)
+            🎯 Practice Weak Topics (10 BCQs)
           </button>
           <button type="button" class="btn btn-secondary" id="new-session-btn">
-            New Session
+            🏠 New Session
           </button>
         </div>
+
+        <!-- Expandable Full Answer Review -->
+        <details class="review-accordion" id="review-accordion">
+          <summary>
+            <span>📋 Review All Questions &amp; Explanations</span>
+            <span class="review-count" id="review-count-badge">0</span>
+          </summary>
+          <div id="review-list" class="review-list"></div>
+        </details>
       </section>
     </main>
   </div>
+
+  <!-- Toast Notification -->
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
 
   <script src="app.js" type="module"></script>
 </body>
