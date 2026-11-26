@@ -38,6 +38,8 @@ class WeakTopicsRequest(BaseModel):
     module: str
     weak_topics: list[str] = []
     limit: int = 10
+    exclude_ids: list[str] = []
+    source: str = "mixed"
 
 
 def _tokenize(text: str) -> set[str]:
@@ -70,6 +72,40 @@ def _score_topic_match(q: dict[str, Any], target_title: str) -> int:
     if not t_tokens:
         return 0
     return len(q_tokens & t_tokens)
+
+
+def _shuffle_question_options(q: dict[str, Any]) -> dict[str, Any]:
+    """Return a copy of question with uniformly shuffled options & remapped distractor letters."""
+    opts = q.get("options") or []
+    c_idx = q.get("correctIndex", 0)
+    if len(opts) != 4 or not (0 <= c_idx <= 3):
+        return q
+
+    perm = [0, 1, 2, 3]
+    random.shuffle(perm)
+    letters = ["A", "B", "C", "D"]
+    old_to_new_letter = {letters[old_i]: letters[new_i] for new_i, old_i in enumerate(perm)}
+
+    new_opts = [opts[i] for i in perm]
+    new_correct = perm.index(c_idx)
+
+    remapped_distractors: list[str] = []
+    for d in q.get("distractors") or []:
+        m = re.match(r"^([A-D])\s*[:\.\)\-]\s*(.+)$", d.strip(), re.I)
+        if m:
+            old_l = m.group(1).upper()
+            new_l = old_to_new_letter.get(old_l, old_l)
+            remapped_distractors.append(f"{new_l}: {m.group(2).strip()}")
+        else:
+            remapped_distractors.append(d)
+    remapped_distractors.sort(key=lambda s: s[0] if s and s[0] in letters else "Z")
+
+    return {
+        **q,
+        "options": new_opts,
+        "correctIndex": new_correct,
+        "distractors": remapped_distractors,
+    }
 
 
 @app.get("/api/health")
@@ -116,20 +152,24 @@ def get_questions(
 
     ai_questions: list[dict[str, Any]] = []
     if source in ("ai", "mixed") and is_ai_configured():
-        ai_target = limit if source == "ai" else max(1, limit // 2)
+        # Keep AI generation fast (< 4s) even on 20/30/50-MCQ sessions
+        ai_target = min(limit, 8) if source == "ai" else min(max(2, limit // 2), 5)
         try:
-            ai_questions = generate_ai_bcqs(module, mod_name, subject, target_title, los, count=min(ai_target, 15))
+            ai_questions = generate_ai_bcqs(module, mod_name, subject, target_title, los, count=ai_target)
         except Exception:
             ai_questions = []
 
     if source == "ai" and ai_questions:
-        selected = ai_questions[:limit]
+        past_topup = ordered_past[: max(0, limit - len(ai_questions))]
+        selected = ai_questions + past_topup
     elif source == "mixed" and ai_questions:
         past_needed = max(0, limit - len(ai_questions))
         selected = ai_questions + ordered_past[:past_needed]
         random.shuffle(selected)
     else:
         selected = ordered_past[:limit]
+
+    selected = [_shuffle_question_options(q) for q in selected]
 
     return {
         "questions": selected,
@@ -142,17 +182,47 @@ def get_questions(
 
 @app.post("/api/sessions/weak-topics")
 def get_weak_topic_questions(req: WeakTopicsRequest) -> dict[str, Any]:
-    pool = [q for q in PAST_BANK if q["module"] == req.module]
+    excluded = set(req.exclude_ids)
+    pool = [q for q in PAST_BANK if q["module"] == req.module and q["id"] not in excluded]
+    if not pool:
+        pool = [q for q in PAST_BANK if q["module"] == req.module]
+
     if req.weak_topics:
         scored = sorted(
             pool,
             key=lambda q: max((_score_topic_match(q, wt) for wt in req.weak_topics), default=0),
             reverse=True,
         )
-        selected = scored[: req.limit]
+        ordered_past = scored
     else:
-        selected = random.sample(pool, min(req.limit, len(pool)))
-    return {"questions": selected, "total_available": len(pool)}
+        ordered_past = list(pool)
+        random.shuffle(ordered_past)
+
+    ai_questions: list[dict[str, Any]] = []
+    if req.source in ("ai", "mixed") and is_ai_configured():
+        mod_name, _, _ = _topic_meta(req.module, "all", "all")
+        ai_target = min(req.limit, 5)
+        try:
+            ai_questions = generate_ai_bcqs(
+                req.module,
+                mod_name,
+                "all",
+                ", ".join(req.weak_topics[:3]) if req.weak_topics else None,
+                req.weak_topics,
+                count=ai_target,
+            )
+        except Exception:
+            ai_questions = []
+
+    if ai_questions:
+        past_needed = max(0, req.limit - len(ai_questions))
+        selected = ai_questions + ordered_past[:past_needed]
+        random.shuffle(selected)
+    else:
+        selected = ordered_past[: req.limit]
+
+    selected = [_shuffle_question_options(q) for q in selected]
+    return {"questions": selected, "total_available": len(pool), "ai_used": len(ai_questions)}
 
 
 # Mount static frontend last so /api/* routes take precedence

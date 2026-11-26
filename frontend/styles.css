@@ -1068,6 +1068,21 @@ kbd {
 .weak-bar-track { height: 6px; border-radius: 999px; background: rgba(148, 163, 184, 0.15); overflow: hidden; }
 .weak-bar-fill { height: 100%; border-radius: 999px; background: var(--danger); }
 
+.mastery-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px 18px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.14), rgba(56, 189, 248, 0.12));
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  animation: slideUp 0.25s ease-out;
+}
+.mastery-prompt-copy strong { display: block; font-size: 0.96rem; color: var(--success); margin-bottom: 3px; }
+.mastery-prompt-copy p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+.mastery-prompt-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
 .verdict-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1136,7 +1151,7 @@ kbd {
   .app-shell { padding: 14px 14px calc(40px + env(safe-area-inset-bottom)); }
   .card { padding: 16px; }
   .module-grid, .topic-picker-row, .grid-2, .mode-cards, .stats-grid, .lo-search-controls { grid-template-columns: 1fr; }
-  .config-footer, .config-cta-group, .arena-actions, .verdict-hero, .resume-banner, .lo-lock-bar { flex-direction: column; align-items: stretch; }
+  .config-footer, .config-cta-group, .arena-actions, .verdict-hero, .resume-banner, .lo-lock-bar, .mastery-prompt { flex-direction: column; align-items: stretch; }
   .verdict-hero { align-items: center; text-align: center; }
   .option-btn, .btn, select, input[type="search"], .mod-card { min-height: 44px; }
   .hotkey-hint, .shortcut-tip, .brand-tag, .momentum-pill { display: none; }

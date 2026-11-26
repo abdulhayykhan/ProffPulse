@@ -73,6 +73,8 @@ const state = {
     timerId: null,
     questionStartMs: 0,
     timingsMs: [],
+    isRetry: false,
+    retryTopics: [],
   },
 };
 
@@ -207,28 +209,42 @@ function loadStats() {
       totalCorrect: parsed.totalCorrect || 0,
       bestStreak: parsed.bestStreak || 0,
       moduleProgress: parsed.moduleProgress || {},
+      questionResults: parsed.questionResults || {},
     };
   } catch {
-    return { totalSolved: 0, totalCorrect: 0, bestStreak: 0, moduleProgress: {} };
+    return { totalSolved: 0, totalCorrect: 0, bestStreak: 0, moduleProgress: {}, questionResults: {} };
   }
 }
 
 function recordSessionStats(questions, answers, sessionBestStreak) {
   const stats = loadStats();
-  let sessionCorrect = 0;
+  if (!stats.questionResults || typeof stats.questionResults !== "object") {
+    stats.questionResults = {};
+  }
+
+  // Deduplicate by unique question id so retrying wrong MCQs updates outcome instead of double-counting
   questions.forEach((q, i) => {
+    if (answers[i] === null || answers[i] === undefined) return;
     const modId = q.module || state.config.moduleId || "foundation";
-    if (!stats.moduleProgress[modId]) {
-      stats.moduleProgress[modId] = { solved: 0, correct: 0 };
-    }
-    stats.moduleProgress[modId].solved++;
-    if (answers[i] === q.correctIndex) {
-      sessionCorrect++;
-      stats.moduleProgress[modId].correct++;
+    const qId = q.id || `${modId}-${q.topic}-${q.stem.slice(0, 32)}`;
+    stats.questionResults[qId] = { m: modId, ok: answers[i] === q.correctIndex };
+  });
+
+  const entries = Object.values(stats.questionResults);
+  const modMap = {};
+  let totalCorrect = 0;
+  entries.forEach((rec) => {
+    if (!modMap[rec.m]) modMap[rec.m] = { solved: 0, correct: 0 };
+    modMap[rec.m].solved++;
+    if (rec.ok) {
+      modMap[rec.m].correct++;
+      totalCorrect++;
     }
   });
-  stats.totalSolved += questions.length;
-  stats.totalCorrect += sessionCorrect;
+
+  stats.totalSolved = entries.length;
+  stats.totalCorrect = totalCorrect;
+  stats.moduleProgress = modMap;
   stats.bestStreak = Math.max(stats.bestStreak, sessionBestStreak);
   try {
     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
@@ -351,6 +367,8 @@ function saveActiveSession() {
         bestStreak: state.session.bestStreak,
         timerSeconds: state.session.timerSeconds,
         timingsMs: state.session.timingsMs,
+        isRetry: state.session.isRetry,
+        retryTopics: state.session.retryTopics,
       })
     );
   } catch {
@@ -830,6 +848,8 @@ function bindConfigEvents() {
         timerId: null,
         questionStartMs: Date.now(),
         timingsMs: saved.timingsMs || [],
+        isRetry: Boolean(saved.isRetry),
+        retryTopics: saved.retryTopics || [],
       };
       showScreen("screen-arena");
       renderQuestionDots();
@@ -946,7 +966,9 @@ function bindConfigEvents() {
   $("saved-mistakes-btn").addEventListener("click", () => {
     const saved = loadSavedMistakes();
     if (saved.length > 0) {
-      startSession(saved.slice(0, state.config.length), "practice");
+      const slice = saved.slice(0, state.config.length);
+      const topics = [...new Set(slice.map((q) => q.topic).filter(Boolean))];
+      startSession(slice, "practice", { isRetry: true, retryTopics: topics });
     }
   });
 
@@ -1050,21 +1072,51 @@ function buildSessionQuestions(cfg, overrideTopics = null) {
   return questions.slice(0, cfg.length);
 }
 
+function shuffleQuestionOptions(q) {
+  if (!Array.isArray(q.options) || q.options.length !== 4) return q;
+  const perm = [0, 1, 2, 3];
+  for (let i = perm.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [perm[i], perm[j]] = [perm[j], perm[i]];
+  }
+  const letters = ["A", "B", "C", "D"];
+  const oldToNew = {};
+  perm.forEach((oldIdx, newIdx) => {
+    oldToNew[letters[oldIdx]] = letters[newIdx];
+  });
+  const distractors = (q.distractors || []).map((d) => {
+    const m = String(d).trim().match(/^([A-D])\s*[:.)\-]\s*(.+)$/i);
+    if (!m) return d;
+    const newL = oldToNew[m[1].toUpperCase()] || m[1].toUpperCase();
+    return `${newL}: ${m[2].trim()}`;
+  });
+  distractors.sort((a, b) => (a[0] || "Z").localeCompare(b[0] || "Z"));
+  return {
+    ...q,
+    options: perm.map((i) => q.options[i]),
+    correctIndex: perm.indexOf(q.correctIndex),
+    distractors,
+  };
+}
+
 // --- Screen 2: Interactive Quiz Arena ---
-function startSession(questions, mode) {
+function startSession(questions, mode, opts = {}) {
   stopTimer();
+  const shuffled = questions.map(shuffleQuestionOptions);
   state.config.mode = mode;
   state.session = {
-    questions,
+    questions: shuffled,
     currentIndex: 0,
-    answers: new Array(questions.length).fill(null),
-    flagged: new Array(questions.length).fill(false),
+    answers: new Array(shuffled.length).fill(null),
+    flagged: new Array(shuffled.length).fill(false),
     streak: 0,
     bestStreak: 0,
-    timerSeconds: mode === "exam" ? questions.length * 60 : 0,
+    timerSeconds: mode === "exam" ? shuffled.length * 60 : 0,
     timerId: null,
     questionStartMs: Date.now(),
     timingsMs: [],
+    isRetry: Boolean(opts.isRetry),
+    retryTopics: opts.retryTopics || [],
   };
 
   showScreen("screen-arena");
@@ -1512,17 +1564,34 @@ function finishSession() {
 
   $("retry-wrong-btn").disabled = wrongQuestions.length === 0;
   $("retry-wrong-btn").onclick = () => {
-    if (wrongQuestions.length) startSession(wrongQuestions, "practice");
+    if (wrongQuestions.length) {
+      const retryTopics = [...new Set(wrongQuestions.map((q) => q.topic).filter(Boolean))];
+      startSession(wrongQuestions, "practice", { isRetry: true, retryTopics });
+    }
   };
 
-  $("practice-weak-btn").disabled = weakEntries.length === 0;
-  $("practice-weak-btn").onclick = async () => {
-    const weakTopics = weakEntries.map(([t]) => t);
+  const targetTopics = weakEntries.length
+    ? weakEntries.map(([t]) => t)
+    : state.session.retryTopics || [];
+  const sessionQIds = questions.map((q) => q.id).filter(Boolean);
+
+  const launchTargetedDrill = async (topics, btnEl) => {
+    if (btnEl) {
+      btnEl.disabled = true;
+      btnEl.textContent = "Loading 10 MCQs…";
+    }
     try {
+      const modId = questions[0]?.module || state.config.moduleId;
       const res = await fetch("/api/sessions/weak-topics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ module: state.config.moduleId, weak_topics: weakTopics, limit: 10 }),
+        body: JSON.stringify({
+          module: modId,
+          weak_topics: topics,
+          limit: 10,
+          exclude_ids: sessionQIds,
+          source: "mixed",
+        }),
       });
       if (res.ok) {
         const data = await res.json();
@@ -1533,10 +1602,32 @@ function finishSession() {
       }
     } catch {
       // Fallback below
+    } finally {
+      if (btnEl) btnEl.disabled = false;
     }
-    const targeted = buildSessionQuestions({ ...state.config, length: 10 }, weakTopics);
+    const targeted = buildSessionQuestions({ ...state.config, length: 10 }, topics);
     startSession(targeted, "practice");
   };
+
+  $("practice-weak-btn").disabled = targetTopics.length === 0;
+  $("practice-weak-btn").onclick = () => launchTargetedDrill(targetTopics, $("practice-weak-btn"));
+
+  // Mastery prompt after conquering retried mistakes
+  const masteryBanner = $("mastery-prompt-banner");
+  const conqueredRetry = state.session.isRetry && correct > 0 && targetTopics.length > 0;
+  if (conqueredRetry) {
+    const topicLabel = targetTopics.slice(0, 3).join(", ");
+    $("mastery-prompt-title").textContent =
+      wrongQuestions.length === 0
+        ? "🎯 All Missed MCQs Conquered!"
+        : `🎯 ${correct} of ${total} Mistakes Fixed!`;
+    $("mastery-prompt-desc").textContent = `Ready to master "${topicLabel}"? Practice 10 fresh MCQs on these exact topics.`;
+    $("mastery-more-btn").onclick = () => launchTargetedDrill(targetTopics, $("mastery-more-btn"));
+    $("mastery-dismiss-btn").onclick = () => masteryBanner.classList.add("hidden");
+    masteryBanner.classList.remove("hidden");
+  } else {
+    masteryBanner.classList.add("hidden");
+  }
 
   showScreen("screen-verdict");
 }
