@@ -1,5 +1,6 @@
 # Raw study material & internal planning docs (never push)
 1st year/
+data/JSMU Study Guides/
 PRD.md
 
 # Environment & secrets
@@ -21,3 +22,6 @@ venv/
 Thumbs.db
 .vscode/
 .idea/
+
+.vercel
+.env*

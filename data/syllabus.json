@@ -120,15 +120,9 @@
                 "Identify large lymphatic channels",
                 "Discuss the role of lymphatics in the spread of cancer"
               ]
-            }
-          ]
-        },
-        {
-          "id": "histology",
-          "name": "Histology",
-          "topics": [
+            },
             {
-              "id": "foundation-histology-1",
+              "id": "foundation-anatomy-12",
               "title": "Integumentary system",
               "los": [
                 "Define the term integumentary system",
@@ -139,9 +133,15 @@
                 "Identify the appendages of the skin",
                 "Differentiate between superficial & deep fascia"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "id": "histology",
+          "name": "Histology",
+          "topics": [
             {
-              "id": "foundation-histology-2",
+              "id": "foundation-histology-1",
               "title": "Tissue Preparation and staining",
               "los": [
                 "Describe different stages of tissue preparation",
@@ -150,7 +150,7 @@
               ]
             },
             {
-              "id": "foundation-histology-3",
+              "id": "foundation-histology-2",
               "title": "Cell Membrane",
               "los": [
                 "Identify the structures of cell membrane",
@@ -159,7 +159,7 @@
               ]
             },
             {
-              "id": "foundation-histology-4",
+              "id": "foundation-histology-3",
               "title": "Cytoplasm & Cell organelles",
               "los": [
                 "Define cytoplasm",
@@ -168,7 +168,7 @@
               ]
             },
             {
-              "id": "foundation-histology-5",
+              "id": "foundation-histology-4",
               "title": "Nucleus",
               "los": [
                 "Describe the structure of nuclear membrane",
@@ -176,7 +176,7 @@
               ]
             },
             {
-              "id": "foundation-histology-6",
+              "id": "foundation-histology-5",
               "title": "Cytoskeleton",
               "los": [
                 "Define Cytoskeleton",
@@ -186,7 +186,7 @@
               ]
             },
             {
-              "id": "foundation-histology-7",
+              "id": "foundation-histology-6",
               "title": "Cell Cycle",
               "los": [
                 "Define cell cycle",
@@ -197,7 +197,7 @@
               ]
             },
             {
-              "id": "foundation-histology-8",
+              "id": "foundation-histology-7",
               "title": "Epithelium",
               "los": [
                 "Describe the types, locations and functions of epithelium",
@@ -207,7 +207,7 @@
               ]
             },
             {
-              "id": "foundation-histology-9",
+              "id": "foundation-histology-8",
               "title": "Cell Junctions",
               "los": [
                 "Define cell junction",
@@ -217,7 +217,7 @@
               ]
             },
             {
-              "id": "foundation-histology-10",
+              "id": "foundation-histology-9",
               "title": "Glands",
               "los": [
                 "Define glands",
@@ -226,7 +226,7 @@
               ]
             },
             {
-              "id": "foundation-histology-11",
+              "id": "foundation-histology-10",
               "title": "Connective Tissues (Components)",
               "los": [
                 "Define connective tissue",
@@ -235,7 +235,7 @@
               ]
             },
             {
-              "id": "foundation-histology-12",
+              "id": "foundation-histology-11",
               "title": "Connective Tissues (Classification)",
               "los": [
                 "Classify different types of connective tissue",
@@ -244,10 +244,16 @@
               ]
             },
             {
-              "id": "foundation-histology-13",
+              "id": "foundation-histology-12",
               "title": "Histology of muscles",
               "los": [
-                "Describe the histological features of different types of muscular tissue and their location Histology of Skin",
+                "Describe the histological features of different types of muscular tissue and their location"
+              ]
+            },
+            {
+              "id": "foundation-histology-13",
+              "title": "Histology of Skin",
+              "los": [
                 "Define Epidermis & Dermis",
                 "Describe the layers of epidermis along with its cells",
                 "Differentiate between thick and thin skin",
@@ -502,13 +508,19 @@
               "title": "Cell signaling mechanism",
               "los": [
                 "Discuss the activation of receptors and second messengers by cell signaling.",
-                "Explain the various types of membrane receptors and their up regulation/down regulation. 10.Genetic control of cell function",
+                "Explain the various types of membrane receptors and their up regulation/down regulation."
+              ]
+            },
+            {
+              "id": "foundation-physiology-10",
+              "title": "Genetic control of cell function",
+              "los": [
                 "Describe the structure of DNA and functional importance of genetic code.",
                 "Elaborate the process of DNA replication and transcription"
               ]
             },
             {
-              "id": "foundation-physiology-10",
+              "id": "foundation-physiology-11",
               "title": "Genetic control of protein synthesis",
               "los": [
                 "Describe types of RNA and their function.",
@@ -516,7 +528,7 @@
               ]
             },
             {
-              "id": "foundation-physiology-11",
+              "id": "foundation-physiology-12",
               "title": "Cell cycle",
               "los": [
                 "Explain the phases of cell cycle and its regulation.",
@@ -525,11 +537,17 @@
               ]
             },
             {
-              "id": "foundation-physiology-12",
+              "id": "foundation-physiology-13",
               "title": "Locomotion of cell and Apoptosis",
               "los": [
                 "Describe the various types of cell locomotion: Amoeboid and Ciliary movement.",
-                "Discuss Apoptosis with its clinical significance 14.Introduction to Autonomic Nervous System",
+                "Discuss Apoptosis with its clinical significance"
+              ]
+            },
+            {
+              "id": "foundation-physiology-14",
+              "title": "Introduction to Autonomic Nervous System",
+              "los": [
                 "Explain the functional division of Autonomic Nervous System",
                 "Discuss the role of sympathetic and parasympathetic nervous system, their neurotransmitters and receptors in body systems."
               ]
@@ -565,7 +583,7 @@
                 "Describe the mechanism of dissociation of water and maintenance of normal pH",
                 "Discuss the change in pH due to the addition of a given quantity of acid or base",
                 "Describe the role of buffers in maintaining pH",
-                "Explain the Henderson–Hassel Balch equation TOPIC 2: CELL"
+                "Explain the Henderson–Hassel Balch equation"
               ]
             },
             {
@@ -580,7 +598,7 @@
               "id": "foundation-biochemistry-5",
               "title": "Cell organelles",
               "los": [
-                "Discuss the biochemical structure and function of each organelle TOPIC 3: CARBOHYDRATE CHEMISTRY"
+                "Discuss the biochemical structure and function of each organelle"
               ]
             },
             {
@@ -617,7 +635,7 @@
               "los": [
                 "Classify Polysaccharides with examples",
                 "Explain the properties and functions of Polysaccharides",
-                "Describe the clinical importance of Polysaccharides TOPIC 4: LIPID CHEMISTRY"
+                "Describe the clinical importance of Polysaccharides"
               ]
             },
             {
@@ -666,7 +684,7 @@
                 "Classify Eicosanoids with examples",
                 "Explain the functions of Eicosanoids",
                 "Explain the synthesis of Eicosanoids.",
-                "Discuss the clinical significance of Eicosanoids TOPIC 5: PROTEIN CHEMISTRY"
+                "Discuss the clinical significance of Eicosanoids"
               ]
             },
             {
@@ -701,7 +719,7 @@
               "id": "foundation-biochemistry-18",
               "title": "Protein Structure",
               "los": [
-                "Explain the structure of proteins TOPIC 6: NUCLEIC ACID CHEMISTRY"
+                "Explain the structure of proteins"
               ]
             },
             {
@@ -720,7 +738,7 @@
               "los": [
                 "Classify DNA and RNA with examples",
                 "Explain the properties of nucleic acids",
-                "Describe the structure and functions of DNA and RNA TOPIC 7: ENZYME CHEMISTRY"
+                "Describe the structure and functions of DNA and RNA"
               ]
             },
             {
@@ -759,7 +777,13 @@
                 "Explain the diagnostic importance of enzymes and isoenzymes",
                 "Outline different ways of measuring plasma enzymes",
                 "List enzymes and isoenzymes commonly assayed for diagnostic purposes",
-                "Discuss the clinical importance of isoenzymes of LDH, CPK, Troponin, Alkaline phosphatase and Aldolase TOPIC 8: 25.VITAMINS",
+                "Discuss the clinical importance of isoenzymes of LDH, CPK, Troponin, Alkaline phosphatase and Aldolase"
+              ]
+            },
+            {
+              "id": "foundation-biochemistry-25",
+              "title": "VITAMINS",
+              "los": [
                 "Define vitamins with examples",
                 "Classify vitamins with examples",
                 "List the sources, daily requirement, digestion absorption of individual vitamins",
@@ -897,19 +921,37 @@
               "title": "Hemorrhagic & thromboembolic conditions",
               "los": [
                 "Explain the following hemorrhagic and Thrombo-embolic conditions a) Hemophilia b) Thrombocytopenia c) Disseminated Intravascular Coagulation",
-                "Discuss the role of commonly used anticoagulants 12.Genesis and general characteristics of white blood cells",
+                "Discuss the role of commonly used anticoagulants"
+              ]
+            },
+            {
+              "id": "blood-physiology-12",
+              "title": "Genesis and general characteristics of white blood cells",
+              "los": [
                 "Describe the process of leukocyte genesis",
-                "List the types of granulocytes and agranulocytes, their functions & normal values 13.Functions of WBCs, Monocytes macrophage cell system",
+                "List the types of granulocytes and agranulocytes, their functions & normal values"
+              ]
+            },
+            {
+              "id": "blood-physiology-13",
+              "title": "Functions of WBCs, Monocytes macrophage cell system",
+              "los": [
                 "Explain the significance of Reticuloendothelial system in body defense mechanism",
                 "List the various types of macrophages present in different tissues of body",
-                "Discuss the role of passive immunity against infection 14.Types and functions of lymphocytes",
+                "Discuss the role of passive immunity against infection"
+              ]
+            },
+            {
+              "id": "blood-physiology-14",
+              "title": "Types and functions of lymphocytes",
+              "los": [
                 "List the types of lymphocytes and their sites of origin",
                 "Discuss the functions of T and B lymphocytes",
                 "Enumerate the types of T lymphocytes & their functions"
               ]
             },
             {
-              "id": "blood-physiology-12",
+              "id": "blood-physiology-15",
               "title": "Immunity & its types (Innate)",
               "los": [
                 "Define immunity",
@@ -918,7 +960,7 @@
               ]
             },
             {
-              "id": "blood-physiology-13",
+              "id": "blood-physiology-16",
               "title": "Cell mediated Immunity",
               "los": [
                 "Define cell mediated immunity",
@@ -927,7 +969,7 @@
               ]
             },
             {
-              "id": "blood-physiology-14",
+              "id": "blood-physiology-17",
               "title": "Humoral immunity",
               "los": [
                 "Define Humoral immunity",
@@ -937,7 +979,7 @@
               ]
             },
             {
-              "id": "blood-physiology-15",
+              "id": "blood-physiology-18",
               "title": "Passive immunity and immunization",
               "los": [
                 "Define passive immunity & immunization",
@@ -947,7 +989,7 @@
               ]
             },
             {
-              "id": "blood-physiology-16",
+              "id": "blood-physiology-19",
               "title": "Allergy and hypersensitivity",
               "los": [
                 "Discuss the types of hypersensitivity and allergic reactions including Urticaria, Anaphylaxis and Hay fever",
@@ -998,7 +1040,7 @@
               "los": [
                 "Enumerate the Hemoglobinopathies",
                 "Explain the biochemical, genetic, and clinical significance of Thalassemia",
-                "Explain the biochemical, genetic, and clinical significance of Sickle cell anemia TOPIC - 2 VITAMINS & MINERALS"
+                "Explain the biochemical, genetic, and clinical significance of Sickle cell anemia"
               ]
             },
             {
@@ -1027,7 +1069,7 @@
               "los": [
                 "Discuss metabolism of Vitamin E & Vitamin K in the body",
                 "Describe the biochemical functions, dietary sources and recommended daily intake of Vitamins E & K",
-                "Discuss the clinical significance of Vitamin E & Vitamin K deficiency TOPIC - 3 PLASMA PROTEINS"
+                "Discuss the clinical significance of Vitamin E & Vitamin K deficiency"
               ]
             },
             {
@@ -1077,7 +1119,7 @@
             },
             {
               "id": "locomotion-anatomy-2",
-              "title": "UPPER LIMB Clavicle (Osteology & muscle attachments)",
+              "title": "Clavicle (Osteology & muscle attachments)",
               "los": [
                 "Identify the features of Clavicle like borders, surfaces andbony prominences.",
                 "Determine the side of the bone.",
@@ -1122,52 +1164,78 @@
                 "Describe the attachments of muscle of pectoral girdle and its neurovascular supply.",
                 "Discuss the clavi-pectoral fascia.",
                 "Describe the triangle of auscultation.",
-                "Describe the nerves and blood vessels of this region. 10.Anatomy of Shoulder joint & its movements",
-                "Classify the type of shoulder joint.",
-                "Describe the structure of shoulder joint.",
-                "Describe the rotator cuff muscles.",
-                "Describe the movements of shoulder joint.",
-                "Explain clinical aspects of the joint. 11.Breast Development, Gross and Histology",
-                "Discuss the anatomy of breast.",
-                "Explain the relation of breast within pectoral region.",
-                "Describe the blood supply & lymphatic drainage of breast",
-                "Discuss the significance of axillary tail.",
-                "Explain the development of breast",
-                "Discuss the histological features of breast"
+                "Describe the nerves and blood vessels of this region."
               ]
             },
             {
               "id": "locomotion-anatomy-7",
+              "title": "Anatomy of Shoulder joint & its movements",
+              "los": [
+                "Classify the type of shoulder joint.",
+                "Describe the structure of shoulder joint.",
+                "Describe the rotator cuff muscles.",
+                "Describe the movements of shoulder joint.",
+                "Explain clinical aspects of the joint."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-8",
               "title": "Posterior Scapular Region",
               "los": [
                 "Describe the attachments of muscles of posterior scapular region along with its innervation and actions.",
-                "Describe the boundaries and contents of: Suprascapular foramen Quadrangular space Triangular space Triangular interval",
+                "Describe the boundaries and contents of:",
+                "Suprascapular foramen",
+                "Quadrangular space",
+                "Triangular space",
+                "Triangular interval",
                 "Describe the vessels of posterior scapular region.",
-                "Describe the nerves of posterior scapular region. 13.Axilla, boundaries and contents along with Axillary artery and veins",
+                "Describe the nerves of posterior scapular region."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-9",
+              "title": "Axilla, boundaries and contents along with Axillary artery and veins",
+              "los": [
                 "Describe the position and shape of Axilla",
                 "Describe the boundaries of Axilla, and the muscles forming these boundaries",
                 "Discuss the formation, course and relations of Axillary vessels",
-                "Describe the groups of Axillary lymph nodes and their arrangement 14.Brachial Plexus",
+                "Describe the groups of Axillary lymph nodes and their arrangement"
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-10",
+              "title": "Brachial Plexus",
+              "los": [
                 "Describe the formation of brachial plexus, with its root value and divisions (roots, trunk, division, and cords).",
                 "Enumerate the branches arising from the cords.",
-                "Name the muscles and skin supplied by the branches of brachial plexus. 15.Development of limbs & joints and their congenital anomalies",
-                "Define apical ectodermal ridge (AER).",
-                "Define the source of mesoderm forming the limb muscles.",
-                "Discuss the site and time of appearance of upper and lower limb buds.",
-                "Describe the mesenchymal proliferation under the influence of AER and differentiation into cartilaginous models of future limb bones.",
-                "Discuss the hand plate and formation of digital rays resulting into digits.",
-                "Describe the muscles involved in and process of rotation of both Limbs.",
-                "Discuss the differentiation of mesenchyme to form fibrous, cartilaginous and synovial joints.",
-                "Discuss the congenital anomalies of both limbs & joints. 16.Muscles of anterior compartment of arm & neurovascular supply",
+                "Name the muscles and skin supplied by the branches of brachial plexus."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-11",
+              "title": "Muscles of anterior compartment of arm & neurovascular supply",
+              "los": [
                 "Enumerate the muscles of anterior compartment of arm.",
                 "Discuss the attachment of muscles, their nerves supply and their actions.",
                 "Explain the course of Musculocutaneous nerve, its branches and distribution.",
-                "Relate the impact of lesions of main nerves of compartment with the clinical conditions. 17.Muscles of Posterior compartment of arm & neurovascular supply",
+                "Relate the impact of lesions of main nerves of compartment with the clinical conditions."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-12",
+              "title": "Muscles of Posterior compartment of arm & neurovascular supply",
+              "los": [
                 "Name the muscles present in the posterior compartment of arm.",
                 "Describe the actions performed by the muscles of posterior compartment of arm.",
                 "Describe the nerve supply of the muscles of this compartment.",
                 "Explain the course of vessels present in this compartment.",
-                "Discuss the clinical aspect related to the topic. 18.Elbow Joint",
+                "Discuss the clinical aspect related to the topic."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-13",
+              "title": "Elbow Joint",
+              "los": [
                 "Describe the morphological structure of the joint.",
                 "Discuss the muscles acting on the elbow joint.",
                 "Explain the neurovascular supply of the joint.",
@@ -1175,7 +1243,7 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-8",
+              "id": "locomotion-anatomy-14",
               "title": "Cubital fossa and Anastomosis around elbow joint",
               "los": [
                 "Describe the boundaries of Cubital fossa.",
@@ -1184,7 +1252,7 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-9",
+              "id": "locomotion-anatomy-15",
               "title": "Radius (Osteology & muscle attachments)",
               "los": [
                 "Identify its bony landmarks (borders, surfaces & prominences)",
@@ -1193,18 +1261,30 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-10",
+              "id": "locomotion-anatomy-16",
               "title": "Ulna (Osteology & muscle attachments)",
               "los": [
                 "Identify the bone.",
                 "Determine the side of bone.",
-                "Describe the surfaces, borders and ends of the bone. 22.Muscles of the anterior compartment of forearm & neuro vascular supply",
+                "Describe the surfaces, borders and ends of the bone."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-17",
+              "title": "Muscles of the anterior compartment of forearm & neuro vascular supply",
+              "los": [
                 "Name the muscles present in the anterior compartment of forearm.",
                 "Explain the division of muscle layer in the anterior compartment.",
                 "Explain actions of the muscles of anterior compartment of forearm.",
                 "Discuss the nerve supply of the muscles of this compartment.",
                 "Describe the course of vessels present in this compartment.. along with the supply to the structures in this compartment.",
-                "Discuss the clinical aspect related to the topic. 23.Muscles of the posterior compartment of forearm & neuro vascular supply",
+                "Discuss the clinical aspect related to the topic."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-18",
+              "title": "Muscles of the posterior compartment of forearm & neuro vascular supply",
+              "los": [
                 "Name the muscles present in the posterior compartment of forearm.",
                 "Explain the division of muscle layer in the posterior compartment.",
                 "Explain actions of the muscles of posterior compartment of forearm.",
@@ -1213,41 +1293,102 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-11",
+              "id": "locomotion-anatomy-19",
               "title": "Osteology of hand",
               "los": [
-                "Describe the bony arrangement of hand. 25.Wrist joint, Radioulnar and small joints of hand",
+                "Describe the bony arrangement of hand."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-20",
+              "title": "Wrist joint, Radioulnar and small joints of hand",
+              "los": [
                 "Describe the morphology of wrist joint.",
                 "Discuss the neurovascular supply of wrist joint.",
                 "Describe Radio-ulnar joints and discuss its neurovascular supply.",
                 "Discuss the movements occurring at these joints.",
                 "Classify the intercarpal, metacarpal and inter-phalangeal joint.",
-                "Discuss the clinical aspect related to the topic. 26.Muscles and Spaces of Hand",
+                "Discuss the clinical aspect related to the topic."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-21",
+              "title": "Muscles and Spaces of Hand",
+              "los": [
                 "Discuss the muscles of hand.",
                 "Discuss the palmar aspect of wrist and hand.",
                 "Explain the attachments of flexor retinaculum, palmar aponeurosis and fibrous flexor sheaths of fingers.",
                 "Describe the spaces of hand.",
-                "Discuss the clinical importance of these spaces. 27.Blood vessels and nerves of hand",
+                "Discuss the clinical importance of these spaces."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-22",
+              "title": "Blood vessels and nerves of hand",
+              "los": [
                 "Enumerate the arterial supply of hand.",
                 "Describe the course and relations of Radial and Ulnar arteries andits branches with relation to hand.",
                 "Discuss the formation of superficial and deep palmar arch,",
                 "Describe the veins of hand and their tributaries.",
-                "Describe the nerves of the hand and the injuries. 28.Cutaneous supply of upper limb",
-                "Describe the cutaneous supply and dermatomes of upper limb. 29.Venous and Lymphatic drainage of upper limb",
+                "Describe the nerves of the hand and the injuries."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-23",
+              "title": "Cutaneous supply of upper limb",
+              "los": [
+                "Describe the cutaneous supply and dermatomes of upper limb."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-24",
+              "title": "Venous and Lymphatic drainage of upper limb",
+              "los": [
                 "Describe the venous drainage of upper limb.",
                 "Describe the lymphatic drainage of upper limb.",
                 "Describe the applied anatomy of superficial veins of upper limb.",
-                "Describe groups and area of drainage of each group of lymph nodes. 30.Nerve injuries of Upper limb",
+                "Describe groups and area of drainage of each group of lymph nodes."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-25",
+              "title": "Nerve injuries of Upper limb",
+              "los": [
                 "List the different nerve of upper limb and their root value.",
                 "Discuss the causes of nerve injuries in upper limb.",
-                "Enumerate the common sites of injury of the most commonly injured nerves. 31.Surface Anatomy of Upper limb",
-                "Perform surface markings for main vessels of upper limb. 32.Radiology of upper limb Identify the normal bony land marks on X-Ray BACK",
+                "Enumerate the common sites of injury of the most commonly injured nerves."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-26",
+              "title": "Surface Anatomy of Upper limb",
+              "los": [
+                "Perform surface markings for main vessels of upper limb."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-27",
+              "title": "Radiology of upper limb",
+              "los": [
+                "Identify the normal bony land marks on X-Ray"
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-28",
+              "title": "Back & Vertebral Column",
+              "los": [
                 "Describe the general characteristics of vertebrae.",
                 "List the joints of vertebral column.",
                 "Describe the ligaments of vertebral column",
                 "Discuss the curvatures of vertebral column.",
                 "List the layers of Superficial back muscles with its attachments and actions",
-                "List the layers of intermediate and deep muscles with its actions LOWER LIMB 33.Hip Bone (Osteology & muscle attachments)",
+                "List the layers of intermediate and deep muscles with its actions"
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-29",
+              "title": "Hip Bone (Osteology & muscle attachments)",
+              "los": [
                 "Enumerate the parts of hip bone.",
                 "Determine the side of bone.",
                 "Describe the surfaces, borders and prominences of the bone.",
@@ -1257,14 +1398,20 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-12",
+              "id": "locomotion-anatomy-30",
               "title": "Femur (Osteology & muscle attachments)",
               "los": [
                 "Identify the bone.",
                 "Determine its side.",
                 "Describe its important landmarks.",
                 "Discuss the muscles and ligaments attached to it.",
-                "Discuss the clinical conditions related to it. 35.Hip joint; Movements & Anastomoses around Hip joint",
+                "Discuss the clinical conditions related to it."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-31",
+              "title": "Hip joint; Movements & Anastomoses around Hip joint",
+              "los": [
                 "Describe the formation of hip joint.",
                 "Describe the articular surfaces of hip joint.",
                 "Discuss the attachment of its joint capsule.",
@@ -1272,7 +1419,13 @@
                 "Discuss the muscles acting on the hip joint and different movements performed at the joint.",
                 "Describe its innervations and blood supply.",
                 "Describe the arterial anastomosis around the hip joint.",
-                "Discuss the clinical conditions associated with the hip joint. 36.Formation of Lumbosacral plexus, & its injuries",
+                "Discuss the clinical conditions associated with the hip joint."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-32",
+              "title": "Formation of Lumbosacral plexus, & its injuries",
+              "los": [
                 "Discuss the formation of lumbar plexus.",
                 "List the branches of lumber plexus with their root values.",
                 "Discuss relation of the nerves with Psoas major muscle.",
@@ -1280,7 +1433,13 @@
                 "Explain the formation of sacral plexus.",
                 "Describe the composition and relations of sacral plexus.",
                 "Enumerate branches of sacral plexus.",
-                "Discuss the cutaneous supply of lower limb. 37.Gluteal Region",
+                "Discuss the cutaneous supply of lower limb."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-33",
+              "title": "Gluteal Region",
+              "los": [
                 "Describe the muscles of the Gluteal region and their respective actions.",
                 "Discuss the nerves and blood vessels of the Gluteal region.",
                 "Enumerate different structures entering and leaving the gluteal region.",
@@ -1288,49 +1447,97 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-13",
+              "id": "locomotion-anatomy-34",
               "title": "Deep fascia of thigh",
               "los": [
                 "Explain the arrangement and attachment of deep fascia of thigh.",
                 "Discuss the location of Saphenous opening and its relations.",
                 "Describe the attachments of inguinal ligament.",
-                "Discuss the clinical conditions associated with deep fascia of thigh and inguinal ligament. 39.Muscles of Anterior compartment of thigh (Femoral triangle,femoral sheath & Neurovascular supply)",
+                "Discuss the clinical conditions associated with deep fascia of thigh and inguinal ligament."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-35",
+              "title": "Muscles of Anterior compartment of thigh (Femoral triangle,femoral sheath & Neurovascular supply)",
+              "los": [
                 "Discuss the arrangement of thigh into compartments",
                 "Explain the muscles of anterior compartment of thigh and their respective actions",
                 "Describe the innervation and blood supply of muscles of anterior compartment of thigh",
                 "Describe Femoral triangle, its boundaries and contents",
                 "Describe Femoral sheath and its contents",
-                "Discuss the clinical conditions associated with anterior compartment of thigh, femoral triangle and femoral sheath 40.Medial Side of Thigh (Adductor Compartment)",
+                "Discuss the clinical conditions associated with anterior compartment of thigh, femoral triangle and femoral sheath"
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-36",
+              "title": "Medial Side of Thigh (Adductor Compartment)",
+              "los": [
                 "Explain the muscles of medial compartment of thigh and their respective actions",
-                "Describe the innervation and blood supply of muscles of medial compartment of thigh 41.Muscles of Posterior compartment of thigh and neurovascular supply",
+                "Describe the innervation and blood supply of muscles of medial compartment of thigh"
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-37",
+              "title": "Muscles of Posterior compartment of thigh and neurovascular supply",
+              "los": [
                 "Explain the muscles p o s t e r i o r compartment of thigh and their respective actions.",
                 "Describe the innervation and blood supply of muscles of Posterior compartment of thigh.",
                 "Discuss the greater and Cruciate anastomoses at the back of thigh.",
                 "Discuss Sciatic nerve in detail.",
-                "Discuss the clinical conditions associated with the posterior compartment of thigh. 42.Tibia (Osteology & muscle attachments)",
+                "Discuss the clinical conditions associated with the posterior compartment of thigh."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-38",
+              "title": "Tibia (Osteology & muscle attachments)",
+              "los": [
                 "Identify the bone and determine its side",
                 "Describe its anatomical position.",
                 "Discuss the ligaments attached to Tibia.",
-                "Discuss the fractures and other clinical conditions associated with it. 43.Fibula (Osteology & muscle attachments)",
+                "Discuss the fractures and other clinical conditions associated with it."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-39",
+              "title": "Fibula (Osteology & muscle attachments)",
+              "los": [
                 "Identify bone and determine its side.",
                 "Describe the surfaces, borders and bony prominences of bone",
-                "Discuss the attachment of muscles on fibula 44.Knee joint, genicular anastomosis and locking, unlocking",
+                "Discuss the attachment of muscles on fibula"
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-40",
+              "title": "Knee joint, genicular anastomosis and locking, unlocking",
+              "los": [
                 "Discuss the articular surfaces of joint.",
                 "Describe the ligaments of joint.",
                 "Explain the movements performed at knee joint and the muscles responsible for it.",
                 "Describe the locking and unlocking mechanism.",
                 "Discuss the neurovascular supply of knee joint.",
-                "Describe the clinical condition associated with the joint. 45.Popliteal Fossa & its contents",
+                "Describe the clinical condition associated with the joint."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-41",
+              "title": "Popliteal Fossa & its contents",
+              "los": [
                 "Discuss the boundaries of Popliteal fossa.",
                 "Enumerate the contents of Popliteal fossa.",
-                "Discuss clinical conditions related to Popliteal fossa (e.g. the Baker’s cyst). 46.Anterior & Lateral compartment of leg (muscles, nerves and vessels)",
+                "Discuss clinical conditions related to Popliteal fossa (e.g. the Baker’s cyst)."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-42",
+              "title": "Anterior & Lateral compartment of leg (muscles, nerves and vessels)",
+              "los": [
                 "Discuss the facial compartments of leg.",
                 "Explain muscles of anterior and lateral compartment with its neurovascular supply.",
                 "Describe the compartment syndrome."
               ]
             },
             {
-              "id": "locomotion-anatomy-14",
+              "id": "locomotion-anatomy-43",
               "title": "Posterior compartment of leg",
               "los": [
                 "Enumerate the muscles of posterior compartment of leg.",
@@ -1339,14 +1546,14 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-15",
+              "id": "locomotion-anatomy-44",
               "title": "Osteology of foot",
               "los": [
                 "Describe the bony arrangement of foot."
               ]
             },
             {
-              "id": "locomotion-anatomy-16",
+              "id": "locomotion-anatomy-45",
               "title": "Dorsum of Foot",
               "los": [
                 "Describe the muscles of dorsum of foot.",
@@ -1356,7 +1563,7 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-17",
+              "id": "locomotion-anatomy-46",
               "title": "Sole of foot & Nerves and Vessels of foot",
               "los": [
                 "Describe the architecture of sole of foot.",
@@ -1366,7 +1573,7 @@
               ]
             },
             {
-              "id": "locomotion-anatomy-18",
+              "id": "locomotion-anatomy-47",
               "title": "Ankle joint, superior & Inferior Tibio-Fibular joint",
               "los": [
                 "Describe the Ankle Joint, its type, articular surface and ligaments",
@@ -1374,25 +1581,58 @@
                 "Discuss the Superior and Inferior Tibio-Fibular Joints, Sub-talar Joint, transverse tarsal Joint.",
                 "Describe the movement performed and the muscles responsible for these movement at the joints.",
                 "Discuss the neurovascular supply of the joints.",
-                "Discuss the clinical condition associated with the joints 52.Arches of foot",
-                "Describe the architecture & functions of arches of foot.",
-                "Describe the bones which are responsible for forming these arches.",
-                "Explain the ligaments which are holding these arches.",
-                "Describe Plantar Fasciitis and relevant injuries. 53.Cutaneous supply of lower limb",
-                "Describe in detail the cutaneous supply of lower limb. 54.Venous and lymphatic drainage of lower limb",
-                "Enumerate the superficial veins.",
-                "Discuss the course of great and small saphenous veins and their connections with the deep veins of the leg.",
-                "Explain clinical conditions related to the Superficial veins; like venous thrombosis.",
-                "Describe the lymphatic drainage of lower limb. 55.Injuries of lower limb",
-                "Name the different nerves of lower limb and their root values",
-                "Discuss the causes of nerve injuries in lower limb.",
-                "Enumerate the common sites of injury of the most commonly injured nerves.",
-                "Discuss the symptoms caused by these nerve injuries. 56.Surface anatomy of lower limb",
-                "Mark the following: different joints of lower limb. course of blood vessels of lower limb. course of important nerves of lower limb."
+                "Discuss the clinical condition associated with the joints"
               ]
             },
             {
-              "id": "locomotion-anatomy-19",
+              "id": "locomotion-anatomy-48",
+              "title": "Arches of foot",
+              "los": [
+                "Describe the architecture & functions of arches of foot.",
+                "Describe the bones which are responsible for forming these arches.",
+                "Explain the ligaments which are holding these arches.",
+                "Describe Plantar Fasciitis and relevant injuries."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-49",
+              "title": "Cutaneous supply of lower limb",
+              "los": [
+                "Describe in detail the cutaneous supply of lower limb."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-50",
+              "title": "Venous and lymphatic drainage of lower limb",
+              "los": [
+                "Enumerate the superficial veins.",
+                "Discuss the course of great and small saphenous veins and their connections with the deep veins of the leg.",
+                "Explain clinical conditions related to the Superficial veins; like venous thrombosis.",
+                "Describe the lymphatic drainage of lower limb."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-51",
+              "title": "Injuries of lower limb",
+              "los": [
+                "Name the different nerves of lower limb and their root values",
+                "Discuss the causes of nerve injuries in lower limb.",
+                "Enumerate the common sites of injury of the most commonly injured nerves.",
+                "Discuss the symptoms caused by these nerve injuries."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-52",
+              "title": "Surface anatomy of lower limb",
+              "los": [
+                "Mark the following:",
+                "different joints of lower limb.",
+                "course of blood vessels of lower limb.",
+                "course of important nerves of lower limb."
+              ]
+            },
+            {
+              "id": "locomotion-anatomy-53",
               "title": "Radiology of lower limb",
               "los": [
                 "Identify the normal bony landmarks as seen on X-Ray"
@@ -1422,6 +1662,18 @@
                 "Describe the cells, fibers and matrix of cartilage.",
                 "Differentiate the three types of cartilage on the basis of histological features and location."
               ]
+            },
+            {
+              "id": "locomotion-histology-3",
+              "title": "Breast Development, Gross and Histology",
+              "los": [
+                "Discuss the anatomy of breast.",
+                "Explain the relation of breast within pectoral region.",
+                "Describe the blood supply & lymphatic drainage of breast",
+                "Discuss the significance of axillary tail.",
+                "Explain the development of breast",
+                "Discuss the histological features of breast"
+              ]
             }
           ]
         },
@@ -1437,6 +1689,20 @@
                 "Explain the differentiation of Trilaminar germ disc",
                 "Discuss the formation of mesoderm and paraxial mesoderm",
                 "Discuss the developmental relation of hypaxial and epaxial muscles"
+              ]
+            },
+            {
+              "id": "locomotion-embryology-2",
+              "title": "Development of limbs & joints and their congenital anomalies",
+              "los": [
+                "Define apical ectodermal ridge (AER).",
+                "Define the source of mesoderm forming the limb muscles.",
+                "Discuss the site and time of appearance of upper and lower limb buds.",
+                "Describe the mesenchymal proliferation under the influence of AER and differentiation into cartilaginous models of future limb bones.",
+                "Discuss the hand plate and formation of digital rays resulting into digits.",
+                "Describe the muscles involved in and process of rotation of both Limbs.",
+                "Discuss the differentiation of mesenchyme to form fibrous, cartilaginous and synovial joints.",
+                "Discuss the congenital anomalies of both limbs & joints."
               ]
             }
           ]
@@ -1521,9 +1787,9 @@
               "id": "locomotion-physiology-9",
               "title": "Muscle adaptation to exercise",
               "los": [
-                "Identify the types of muscle fibers (type I &amp; II)",
+                "Identify the types of muscle fibers (type I & II)",
                 "Describe the effect of exercise on muscular blood flow",
-                "Define the effect of training, endurance &amp; resistance on muscle fibers"
+                "Define the effect of training, endurance & resistance on muscle fibers"
               ]
             }
           ]
@@ -1562,7 +1828,7 @@
                 "Discuss the metabolism of vitamin C in the human body.",
                 "Describe the physical and chemical properties of vitamin C",
                 "Discuss the biochemical functions of vitamin C specially with respect to Collagen and extracellular matrix",
-                "Discuss the clinical significance of vitamin C deficiency BONE METABOLISM"
+                "Discuss the clinical significance of vitamin C deficiency"
               ]
             },
             {
@@ -1583,8 +1849,8 @@
                 "Explain the dietary sources and daily recommended allowance ofCalcium &PO4-",
                 "Discuss the metabolism of Calcium &PO4- in the human body.",
                 "Discuss the regulation of serum calcium in relation to bone metabolism.",
-                "Discuss the biochemical functions of Calcium &amp; PO4-",
-                "Discuss the clinical significance of Calcium &amp; PO4- deficiency and its prevention. PROTEIN METABOLISM"
+                "Discuss the biochemical functions of Calcium & PO4-",
+                "Discuss the clinical significance of Calcium & PO4- deficiency and its prevention."
               ]
             },
             {
@@ -1626,16 +1892,40 @@
                 "Discuss the metabolism of Phenylalanine & Tyrosine and its related disorders",
                 "Discuss the metabolism of Melanin and its related disorder(Albinism)",
                 "Discuss the metabolism of Thyroid hormones and their related disorder",
-                "Discuss the metabolism of neurotransmitters and their related disorder 10.Metabolism & Disorders of Tryptophan",
+                "Discuss the metabolism of neurotransmitters and their related disorder"
+              ]
+            },
+            {
+              "id": "locomotion-biochemistry-10",
+              "title": "Metabolism & Disorders of Tryptophan",
+              "los": [
                 "Discuss the metabolism of tryptophan and its related disorders",
                 "Describe the importance of tryptophan derived biologically important compounds",
-                "Explain clinical significance of disorders of tryptophan 11.Metabolism of Sulphur Containing Amino Acids",
+                "Explain clinical significance of disorders of tryptophan"
+              ]
+            },
+            {
+              "id": "locomotion-biochemistry-11",
+              "title": "Metabolism of Sulphur Containing Amino Acids",
+              "los": [
                 "Discuss the metabolism of Sulphur containing amino acids",
                 "Describe the functions of sulphur containing amino acids",
-                "List the steps of formation of Cysteine and Methionine Explain clinical significance of disorders of sulphur containing amino acids 12.Metabolism of Branched Chain Amino Acids",
+                "List the steps of formation of Cysteine and Methionine Explain clinical significance of disorders of sulphur containing amino acids"
+              ]
+            },
+            {
+              "id": "locomotion-biochemistry-12",
+              "title": "Metabolism of Branched Chain Amino Acids",
+              "los": [
                 "Discuss the metabolism of branched chain amino acids",
                 "Describe the functions of branched – chain amino acids",
-                "Explain the clinical significance of disorders of branched chain amino acids 13.Catabolism of Carbon Skeleton of Amino Acids",
+                "Explain the clinical significance of disorders of branched chain amino acids"
+              ]
+            },
+            {
+              "id": "locomotion-biochemistry-13",
+              "title": "Catabolism of Carbon Skeleton of Amino Acids",
+              "los": [
                 "Explain the catabolism of carbon skeleton of amino acids",
                 "List the Glucogenic & Ketogenic amino acids",
                 "Explain the significance of carbon skeleton of Amino acids",
@@ -1691,10 +1981,22 @@
               "los": [
                 "Describe the layers of thoracic wall",
                 "Describe the attachment of muscles of thoracic wall, their actions & nerve supply",
-                "Describe the arrangement & modifications of fascia 4.Neurovascular supply of thoracic wall",
+                "Describe the arrangement & modifications of fascia"
+              ]
+            },
+            {
+              "id": "respiration-anatomy-4",
+              "title": "Neurovascular supply of thoracic wall",
+              "los": [
                 "Describe the nerve supply of skin, fascia and muscles of thoracic wall",
                 "Describe the origin and course of arteries, and nerves supplying the thoracic wall",
-                "Explain the venous drainage of thoracic wall and its communications 5.Mediastinum, its divisions and contents of superior and anterior mediastinum",
+                "Explain the venous drainage of thoracic wall and its communications"
+              ]
+            },
+            {
+              "id": "respiration-anatomy-5",
+              "title": "Mediastinum, its divisions and contents of superior and anterior mediastinum",
+              "los": [
                 "Define mediastinum",
                 "Describe the divisions of mediastinum",
                 "Define the extent and boundaries of mediastinum",
@@ -1709,7 +2011,7 @@
               ]
             },
             {
-              "id": "respiration-anatomy-4",
+              "id": "respiration-anatomy-6",
               "title": "Posterior Mediastinum-I (Thoracic Aorta, Esophagus & Azygous System of vein)",
               "los": [
                 "Describe the boundaries of posterior mediastinum",
@@ -1726,7 +2028,7 @@
               ]
             },
             {
-              "id": "respiration-anatomy-5",
+              "id": "respiration-anatomy-7",
               "title": "Posterior mediastinum-II (Thoracic sympathetic trunk, thoracic duct, Phrenic and Vagus nerve)",
               "los": [
                 "Discuss the thoracic part of sympathetic chain, ganglia, and branches",
@@ -1735,7 +2037,7 @@
               ]
             },
             {
-              "id": "respiration-anatomy-6",
+              "id": "respiration-anatomy-8",
               "title": "Introduction to respiratory tract (Gross anatomy of pleura)",
               "los": [
                 "Enumerate the parts of respiratory tract",
@@ -1748,7 +2050,7 @@
               ]
             },
             {
-              "id": "respiration-anatomy-7",
+              "id": "respiration-anatomy-9",
               "title": "Neuro-vasculature of l u n g s , b r o n c h i a l & p u l m o n a r y v e s s e l s , & lymphatics of thorax",
               "los": [
                 "Describe the origin, course and termination of bronchial vessels and their territory of supply/ drainage",
@@ -1760,7 +2062,16 @@
               ]
             },
             {
-              "id": "respiration-anatomy-8",
+              "id": "respiration-anatomy-10",
+              "title": "Cross sectional anatomy of thorax",
+              "los": [
+                "Explain Thorax cross sectional anatomy",
+                "Identify mediastinal great vessels, organs and lymph nodes on cross sectional images at different levels",
+                "Identify the structures at T4 vertebral level or angle of Louis"
+              ]
+            },
+            {
+              "id": "respiration-anatomy-11",
               "title": "Sternum & Ribs [muscle attachment, typical and atypical ribs]",
               "los": [
                 "Describe the borders and surfaces of sternum",
@@ -1777,7 +2088,7 @@
               ]
             },
             {
-              "id": "respiration-anatomy-9",
+              "id": "respiration-anatomy-12",
               "title": "Gross anatomy of lung",
               "los": [
                 "Describe apex, base, surfaces and borders of lungs.",
@@ -1789,7 +2100,7 @@
               ]
             },
             {
-              "id": "respiration-anatomy-10",
+              "id": "respiration-anatomy-13",
               "title": "Surface anatomy of thoracic wall, lungs & pleura",
               "los": [
                 "Describe surface marking of ribs and intercostal spaces",
@@ -1810,13 +2121,31 @@
               "title": "Histology of respiratory epithelium and its variations",
               "los": [
                 "Name the types of epithelia lining the various parts of respiratory system",
-                "Explain the histological features of various parts of respiratory system 11.Histology of trachea and lung",
+                "Explain the histological features of various parts of respiratory system"
+              ]
+            },
+            {
+              "id": "respiration-histology-2",
+              "title": "Histology of trachea and lung",
+              "los": [
                 "Describe the histological features of different layers of trachea",
                 "Describe the divisions of bronchial tree",
                 "Discuss the structural variations in different parts of bronchial tree",
                 "Describe the structure of alveoli and intermalleolar septum",
                 "Relate the functions of different type of cells, forming the alveolar wall",
-                "Describe the structure and function of blood -air barrier 12.Development of body cavities and diaphragm, and their anomalies",
+                "Describe the structure and function of blood -air barrier"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "embryology",
+          "name": "Embryology",
+          "topics": [
+            {
+              "id": "respiration-embryology-1",
+              "title": "Development of body cavities and diaphragm, and their anomalies",
+              "los": [
                 "Define the intra-embryonic mesoderm and its parts",
                 "Discuss the divisions of lateral plate mesoderm into visceral and parietal layers enclosing intraembryonic coelom",
                 "Describe the Cephalo-caudal and transverse folding of embryonic disc",
@@ -1824,15 +2153,18 @@
                 "Discuss the formation of Pleuro-pericardial and Pleuro- peritoneal membranes",
                 "Define embryonic components of diaphragm (Septum Transversum etc.)",
                 "Discuss the steps of development of diaphragm from its composite embryonic derivatives",
-                "Discuss anomalies related to its development 13.Development of respiratory system and its anomalies",
+                "Discuss anomalies related to its development"
+              ]
+            },
+            {
+              "id": "respiration-embryology-2",
+              "title": "Development of respiratory system and its anomalies",
+              "los": [
                 "Discuss the formation of Laryngo-tracheal groove & respiratory diverticulum or Lung Bud",
                 "Describe the branching of primitive bronchi",
                 "Discuss the stages of development / maturation of Lungs",
                 "Name the congenital anomalies of respiratory system (tracheoesophageal fistula etc.)",
-                "Describe the main features of the common congenital anomalies 14.Cross sectional anatomy of thorax",
-                "Explain Thorax cross sectional anatomy",
-                "Identify mediastinal great vessels, organs and lymph nodes on cross sectional images at different levels",
-                "Identify the structures at T4 vertebral level or angle of Louis"
+                "Describe the main features of the common congenital anomalies"
               ]
             }
           ]
@@ -1920,27 +2252,57 @@
               "id": "respiration-physiology-9",
               "title": "Respiratory adjustments to exercise",
               "los": [
-                "Describe the effects of exercise on respiratory system 10.Aviation, high altitude, and space physiology",
+                "Describe the effects of exercise on respiratory system"
+              ]
+            },
+            {
+              "id": "respiration-physiology-10",
+              "title": "Aviation, high altitude, and space physiology",
+              "los": [
                 "Discuss the mechanism of acclimatization of the body to low O2",
                 "Explain the process of natural acclimatization in natives of High altitude",
-                "Describe the physiological changes in aviation and space 11.Respiratory adjustments to deep sea diving & hyperbaric conditions",
-                "Discuss the effects of high partial pressures of individual gases on organs and systems of the body. 12.Hypoxia and its types",
+                "Describe the physiological changes in aviation and space"
+              ]
+            },
+            {
+              "id": "respiration-physiology-11",
+              "title": "Respiratory adjustments to deep sea diving & hyperbaric conditions",
+              "los": [
+                "Discuss the effects of high partial pressures of individual gases on organs and systems of the body."
+              ]
+            },
+            {
+              "id": "respiration-physiology-12",
+              "title": "Hypoxia and its types",
+              "los": [
                 "Define hypoxia and its types",
-                "Describe coughing & sneezing reflexes 13.Regulation of respiration-I",
+                "Describe coughing & sneezing reflexes"
+              ]
+            },
+            {
+              "id": "respiration-physiology-13",
+              "title": "Regulation of respiration-I",
+              "los": [
                 "List the respiratory centers & their functions in the regulation of respiration",
                 "Describe the neural and chemical control of respiration"
               ]
             },
             {
-              "id": "respiration-physiology-10",
+              "id": "respiration-physiology-14",
               "title": "Regulation of respiration-II",
               "los": [
-                "Discuss the Role of central and peripheral and chemoreceptors in regulation of breathing. 15 Pulmonary causes of Dyspnea",
+                "Discuss the Role of central and peripheral and chemoreceptors in regulation of breathing."
+              ]
+            },
+            {
+              "id": "respiration-physiology-15",
+              "title": "Pulmonary causes of Dyspnea",
+              "los": [
                 "Describe the Pulmonary causes of Dyspnea:Asthma, Emphysema, Pneumonia, Atelectasis and Tuberculosis"
               ]
             },
             {
-              "id": "respiration-physiology-11",
+              "id": "respiration-physiology-16",
               "title": "Respiratory Failure (Type 1 & 2)",
               "los": [
                 "Differentiate between Type 1 and Type 2 respiratory failure, including their causes, effects, and key distinctions.",
@@ -2120,7 +2482,13 @@
               "title": "Congenital Anomalies of the Heart (Excluding vessels)",
               "los": [
                 "Describe congenital heart defects",
-                "Discuss clinical features of heart defects 11.Development of arterial system & anomalies",
+                "Discuss clinical features of heart defects"
+              ]
+            },
+            {
+              "id": "cvs-embryology-3",
+              "title": "Development of arterial system & anomalies",
+              "los": [
                 "Discuss the relation of pharyngeal arches and aortic arches",
                 "Explain the fate and formation of aortic arches",
                 "Describe the formation of brachiocephalic trunk, common carotid and left subclavian arteries",
@@ -2128,7 +2496,7 @@
               ]
             },
             {
-              "id": "cvs-embryology-3",
+              "id": "cvs-embryology-4",
               "title": "Development of veins and their anomalies",
               "los": [
                 "Describe the major veins of heart, coronary sinus, anterior cardiac veins, venae cordis minimi",
@@ -2137,7 +2505,7 @@
               ]
             },
             {
-              "id": "cvs-embryology-4",
+              "id": "cvs-embryology-5",
               "title": "Fetal Circulation",
               "los": [
                 "Describe the components of fetal circulation",
@@ -2320,23 +2688,47 @@
                 "Discuss the regulation of beta oxidation",
                 "Describe energy generation during beta oxidation",
                 "Name the steps of unsaturated fatty acid oxidation",
-                "Compare fatty acid synthesis with fatty acid oxidation 3.Cholesterol Metabolism",
+                "Compare fatty acid synthesis with fatty acid oxidation"
+              ]
+            },
+            {
+              "id": "cvs-biochemistry-3",
+              "title": "Cholesterol Metabolism",
+              "los": [
                 "Overview of cholesterol structure and functions",
                 "Describe the mechanism of cholesterol synthesis and its degradation",
                 "Discuss the regulation of cholesterol metabolism",
                 "Explain the formation of Bile salts and vitamin D",
                 "Describe the clinical significance of cholesterol",
                 "Discuss the biochemical role of cholesterol in CVS diseases",
-                "Discuss the clinical significance of hyperlipidemia 4.Transport of Lipids",
+                "Discuss the clinical significance of hyperlipidemia"
+              ]
+            },
+            {
+              "id": "cvs-biochemistry-4",
+              "title": "Transport of Lipids",
+              "los": [
                 "Classify the lipoproteins",
                 "Discuss the metabolism of lipoproteins",
                 "Discuss the transport of lipoproteins",
-                "Discuss the clinical significance of lipoproteins 5.Ketone Bodies Metabolism",
+                "Discuss the clinical significance of lipoproteins"
+              ]
+            },
+            {
+              "id": "cvs-biochemistry-5",
+              "title": "Ketone Bodies Metabolism",
+              "los": [
                 "Classify the Ketone bodies",
                 "Describe the biochemical role of Ketone bodies",
                 "Describe Ketone bodies synthesis and utilization.",
                 "Discuss the mechanism of ketoacidosis",
-                "Discuss the clinical significance of ketone bodies 6.Oxidants & Antioxidants",
+                "Discuss the clinical significance of ketone bodies"
+              ]
+            },
+            {
+              "id": "cvs-biochemistry-6",
+              "title": "Oxidants & Antioxidants",
+              "los": [
                 "Classify oxidants and antioxidants",
                 "List the sources of oxidants and antioxidants",
                 "Discuss the biochemical role of oxidants and antioxidants",
@@ -2344,7 +2736,7 @@
               ]
             },
             {
-              "id": "cvs-biochemistry-3",
+              "id": "cvs-biochemistry-7",
               "title": "Role of Minerals in Blood Pressure Regulation",
               "los": [
                 "Minerals in B.P regulation",
@@ -2478,21 +2870,21 @@
                 "in the light of the Quran and Hadith as our role model significance of Husn e Akhlaq effort for improving our conduct",
                 "The above objectives are for all of the lecture topics given below:",
                 "Lecture topics:",
-                "1. Husn-e-Akhlaq &amp; Gentleness(Rifq)",
-                "2. Patience (Sabr) &amp; Gratitude (Shukr)",
-                "3. Modesty (Haya) &amp; Smiling",
-                "4. Speech (Kalam) &amp; Truthfulness",
-                "5. Forgiveness (Darguzar) &amp; Reconciliation (Sulah)",
-                "6. Well Wishing (Khair khwahi) &amp; Mercy (Rehem)",
-                "7. Jealousy &amp; Injustice (Zulm)",
-                "8. Salaam &amp; Contentment (Qanaat)",
-                "9. Giving Gifts &amp; Love of Allah",
-                "10. Arrogance &amp; Anger Management",
-                "11. Greed &amp; Miserliness",
-                "12. Etiquette of Gatherings &amp; Social Interactions",
-                "13. Respect for Elders (Adab) &amp; Affection towards Children’s",
+                "1. Husn-e-Akhlaq & Gentleness(Rifq)",
+                "2. Patience (Sabr) & Gratitude (Shukr)",
+                "3. Modesty (Haya) & Smiling",
+                "4. Speech (Kalam) & Truthfulness",
+                "5. Forgiveness (Darguzar) & Reconciliation (Sulah)",
+                "6. Well Wishing (Khair khwahi) & Mercy (Rehem)",
+                "7. Jealousy & Injustice (Zulm)",
+                "8. Salaam & Contentment (Qanaat)",
+                "9. Giving Gifts & Love of Allah",
+                "10. Arrogance & Anger Management",
+                "11. Greed & Miserliness",
+                "12. Etiquette of Gatherings & Social Interactions",
+                "13. Respect for Elders (Adab) & Affection towards Children’s",
                 "14. Maintaining ties of Relationship (Sila Rehmee) &Duty to Parents",
-                "15. Trustworthiness (Amanat) &amp; Sense of Responsibility"
+                "15. Trustworthiness (Amanat) & Sense of Responsibility"
               ]
             },
             {
