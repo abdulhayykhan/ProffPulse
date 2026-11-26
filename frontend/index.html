@@ -42,8 +42,10 @@
       </div>
 
       <div class="topbar-meta">
-        <div class="momentum-pill" id="momentum-pill" title="Your cumulative local study stats">
+        <div class="momentum-pill" id="momentum-pill" role="button" tabindex="0" title="View your saved browser progress">
           <span id="total-solved-badge">✓ 0 solved</span>
+          <span class="sep">·</span>
+          <span id="overall-acc-badge">🎯 0%</span>
           <span class="sep">·</span>
           <span id="best-streak-badge">🔥 0 best</span>
         </div>
@@ -66,6 +68,19 @@
         <h1 id="config-heading">10-Second Start. <span class="gradient-text">Syllabus-Locked.</span></h1>
         <p class="subtitle">Choose a JSMU module, filter by subject or topic, and drill past papers &amp; UMDC-grounded clinical BCQs.</p>
       </section>
+
+      <!-- Resume Unfinished Session Banner -->
+      <div class="resume-banner hidden" id="resume-banner">
+        <div class="resume-info">
+          <span class="resume-badge">Saved in Browser</span>
+          <strong id="resume-title">Resume unfinished quiz</strong>
+          <span class="resume-meta" id="resume-meta">Question 1 / 10</span>
+        </div>
+        <div class="resume-actions">
+          <button type="button" class="btn btn-primary" id="resume-btn">▶ Resume</button>
+          <button type="button" class="btn btn-secondary" id="discard-resume-btn">Discard</button>
+        </div>
+      </div>
 
       <form id="config-form" class="card config-card">
         <!-- Step 1: Visual Module Cards -->
@@ -171,6 +186,30 @@
           </div>
         </div>
       </form>
+
+      <!-- Saved Browser Progress & Session History -->
+      <details class="card progress-drawer" id="progress-drawer">
+        <summary class="progress-drawer-summary">
+          <div class="progress-drawer-left">
+            <span class="lo-chevron" aria-hidden="true">▸</span>
+            <span>📊 My Browser Progress &amp; Session History</span>
+            <span class="badge" id="history-count-badge">0 sessions</span>
+          </div>
+          <span class="section-sub">Auto-saved locally</span>
+        </summary>
+
+        <div class="progress-drawer-body">
+          <div id="session-history-list" class="history-list"></div>
+          <div class="progress-tools">
+            <button type="button" class="btn btn-secondary btn-sm" id="export-progress-btn">⬇ Export Backup</button>
+            <label class="btn btn-secondary btn-sm file-btn">
+              ⬆ Restore Backup
+              <input type="file" id="import-progress-input" accept="application/json" hidden />
+            </label>
+            <button type="button" class="btn btn-ghost btn-sm danger-text" id="reset-progress-btn">Reset Progress</button>
+          </div>
+        </div>
+      </details>
     </main>
 
     <!-- SCREEN 2: INTERACTIVE QUIZ ARENA -->

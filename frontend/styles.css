@@ -304,9 +304,98 @@ h1, h2, h3, .brand-name {
   place-items: center;
   flex-shrink: 0;
 }
-.mod-info { min-width: 0; }
+.mod-info { min-width: 0; flex: 1; }
 .mod-title { font-weight: 700; font-size: 0.9rem; line-height: 1.25; }
 .mod-meta { font-size: 0.74rem; color: var(--text-muted); margin-top: 2px; }
+.mod-progress-row {
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mod-progress-track {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.16);
+  overflow: hidden;
+}
+.mod-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--mod-accent, var(--accent));
+}
+.mod-progress-text {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+/* Resume Banner & Progress Drawer */
+.resume-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(99, 102, 241, 0.1));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: var(--shadow);
+}
+.resume-info { display: flex; flex-direction: column; gap: 2px; }
+.resume-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+.resume-meta { font-size: 0.82rem; color: var(--text-muted); }
+.resume-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.progress-drawer {
+  margin-top: 16px;
+  padding: 14px 18px;
+}
+.progress-drawer-summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.progress-drawer-left { display: flex; align-items: center; gap: 8px; }
+.progress-drawer[open] .lo-chevron { transform: rotate(90deg); }
+.progress-drawer-body { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+.history-list { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; }
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  font-size: 0.84rem;
+}
+.history-meta { font-size: 0.76rem; color: var(--text-muted); }
+.history-score { font-family: "JetBrains Mono", monospace; font-weight: 700; }
+.progress-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.btn-sm { padding: 7px 12px; font-size: 0.8rem; }
+.file-btn { cursor: pointer; }
+.danger-text { color: var(--danger); margin-left: auto; }
 
 /* Subject Chips */
 .chip-row {
@@ -928,7 +1017,7 @@ kbd {
   .app-shell { padding: 14px 14px calc(40px + env(safe-area-inset-bottom)); }
   .card { padding: 16px; }
   .module-grid, .topic-picker-row, .grid-2, .mode-cards, .stats-grid { grid-template-columns: 1fr; }
-  .config-footer, .config-cta-group, .arena-actions, .verdict-hero { flex-direction: column; align-items: stretch; }
+  .config-footer, .config-cta-group, .arena-actions, .verdict-hero, .resume-banner { flex-direction: column; align-items: stretch; }
   .verdict-hero { align-items: center; text-align: center; }
   .option-btn, .btn, select, input[type="search"], .mod-card { min-height: 44px; }
   .hotkey-hint, .shortcut-tip, .brand-tag, .momentum-pill { display: none; }

@@ -11,6 +11,9 @@ const MODULE_META = {
 
 const MISTAKES_KEY = "proffpulse-mistakes";
 const STATS_KEY = "proffpulse-stats";
+const HISTORY_KEY = "proffpulse-history";
+const ACTIVE_SESSION_KEY = "proffpulse-active-session";
+const CONFIG_KEY = "proffpulse-config";
 const THEME_KEY = "proffpulse-theme";
 const SOUND_KEY = "proffpulse-sound";
 
@@ -72,8 +75,11 @@ const $ = (id) => document.getElementById(id);
 async function init() {
   initTheme();
   initSound();
+  restoreSavedConfig();
   renderMomentumStats();
+  renderSessionHistory();
   refreshSavedMistakesUI();
+  refreshResumeBanner();
   bindConfigEvents();
   bindArenaEvents();
   bindVerdictEvents();
@@ -188,15 +194,34 @@ function refreshSavedMistakesUI() {
 function loadStats() {
   try {
     const raw = localStorage.getItem(STATS_KEY);
-    return raw ? JSON.parse(raw) : { totalSolved: 0, bestStreak: 0 };
+    const parsed = raw ? JSON.parse(raw) : {};
+    return {
+      totalSolved: parsed.totalSolved || 0,
+      totalCorrect: parsed.totalCorrect || 0,
+      bestStreak: parsed.bestStreak || 0,
+      moduleProgress: parsed.moduleProgress || {},
+    };
   } catch {
-    return { totalSolved: 0, bestStreak: 0 };
+    return { totalSolved: 0, totalCorrect: 0, bestStreak: 0, moduleProgress: {} };
   }
 }
 
-function recordSessionStats(solvedCount, sessionBestStreak) {
+function recordSessionStats(questions, answers, sessionBestStreak) {
   const stats = loadStats();
-  stats.totalSolved += solvedCount;
+  let sessionCorrect = 0;
+  questions.forEach((q, i) => {
+    const modId = q.module || state.config.moduleId || "foundation";
+    if (!stats.moduleProgress[modId]) {
+      stats.moduleProgress[modId] = { solved: 0, correct: 0 };
+    }
+    stats.moduleProgress[modId].solved++;
+    if (answers[i] === q.correctIndex) {
+      sessionCorrect++;
+      stats.moduleProgress[modId].correct++;
+    }
+  });
+  stats.totalSolved += questions.length;
+  stats.totalCorrect += sessionCorrect;
   stats.bestStreak = Math.max(stats.bestStreak, sessionBestStreak);
   try {
     localStorage.setItem(STATS_KEY, JSON.stringify(stats));
@@ -204,12 +229,159 @@ function recordSessionStats(solvedCount, sessionBestStreak) {
     // Ignore
   }
   renderMomentumStats();
+  if (state.syllabus) renderModuleCards();
 }
 
 function renderMomentumStats() {
   const stats = loadStats();
+  const acc = stats.totalSolved ? Math.round((stats.totalCorrect / stats.totalSolved) * 100) : 0;
   $("total-solved-badge").textContent = `✓ ${stats.totalSolved} solved`;
+  $("overall-acc-badge").textContent = `🎯 ${acc}%`;
   $("best-streak-badge").textContent = `🔥 ${stats.bestStreak} best`;
+}
+
+function loadHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function addSessionHistory(entry) {
+  const list = [entry, ...loadHistory()].slice(0, 20);
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+  } catch {
+    // Ignore
+  }
+  renderSessionHistory();
+}
+
+function renderSessionHistory() {
+  const list = loadHistory();
+  $("history-count-badge").textContent = `${list.length} session${list.length === 1 ? "" : "s"}`;
+  const container = $("session-history-list");
+  container.innerHTML = "";
+  if (list.length === 0) {
+    container.innerHTML = `<div class="history-row"><span>No completed sessions yet — solve a quiz and your progress saves here automatically.</span></div>`;
+    return;
+  }
+  list.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "history-row";
+    const dateStr = new Date(item.ts).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+    row.innerHTML = `
+      <div>
+        <div><strong>${escapeHtml(item.moduleName)}</strong> · ${item.mode === "exam" ? "Exam" : "Practice"}</div>
+        <div class="history-meta">${dateStr} · ${item.avgSec}s / Q</div>
+      </div>
+      <div class="history-score">${item.correct}/${item.total} (${item.accuracy}%)</div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function saveConfigPrefs() {
+  try {
+    localStorage.setItem(
+      CONFIG_KEY,
+      JSON.stringify({
+        moduleId: state.config.moduleId,
+        source: state.config.source,
+        mode: state.config.mode,
+        length: state.config.length,
+      })
+    );
+  } catch {
+    // Ignore
+  }
+}
+
+function restoreSavedConfig() {
+  try {
+    const raw = localStorage.getItem(CONFIG_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (saved.moduleId) state.config.moduleId = saved.moduleId;
+    if (saved.source) {
+      state.config.source = saved.source;
+      $("source-group").querySelectorAll(".seg-btn").forEach((b) => {
+        b.classList.toggle("active", b.dataset.value === saved.source);
+      });
+    }
+    if (saved.mode) {
+      state.config.mode = saved.mode;
+      $("mode-group").querySelectorAll(".mode-card").forEach((b) => {
+        b.classList.toggle("active", b.dataset.value === saved.mode);
+      });
+    }
+    if (saved.length) {
+      state.config.length = Number(saved.length);
+      $("length-group").querySelectorAll(".pill").forEach((b) => {
+        b.classList.toggle("active", Number(b.dataset.value) === state.config.length);
+      });
+    }
+  } catch {
+    // Ignore
+  }
+}
+
+function saveActiveSession() {
+  if (!state.session.questions.length) return;
+  try {
+    localStorage.setItem(
+      ACTIVE_SESSION_KEY,
+      JSON.stringify({
+        mode: state.config.mode,
+        moduleId: state.config.moduleId,
+        questions: state.session.questions,
+        currentIndex: state.session.currentIndex,
+        answers: state.session.answers,
+        flagged: state.session.flagged,
+        streak: state.session.streak,
+        bestStreak: state.session.bestStreak,
+        timerSeconds: state.session.timerSeconds,
+        timingsMs: state.session.timingsMs,
+      })
+    );
+  } catch {
+    // Ignore
+  }
+}
+
+function clearActiveSession() {
+  try {
+    localStorage.removeItem(ACTIVE_SESSION_KEY);
+  } catch {
+    // Ignore
+  }
+  refreshResumeBanner();
+}
+
+function refreshResumeBanner() {
+  const banner = $("resume-banner");
+  if (!banner) return;
+  try {
+    const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
+    if (!raw) {
+      banner.classList.add("hidden");
+      return;
+    }
+    const saved = JSON.parse(raw);
+    if (!Array.isArray(saved.questions) || !saved.questions.length) {
+      banner.classList.add("hidden");
+      return;
+    }
+    const answered = (saved.answers || []).filter((a) => a !== null).length;
+    const modLabel = saved.moduleId ? saved.moduleId.toUpperCase() : "QUIZ";
+    $("resume-title").textContent = `Resume ${modLabel} (${saved.mode === "exam" ? "Exam Mode" : "Practice Mode"})`;
+    $("resume-meta").textContent = `Question ${saved.currentIndex + 1} of ${saved.questions.length} · ${answered} answered`;
+    banner.classList.remove("hidden");
+  } catch {
+    banner.classList.add("hidden");
+  }
 }
 
 // --- Data Loading ---
@@ -255,9 +427,19 @@ function renderModuleCards() {
     state.config.moduleId = modules[0].id;
   }
 
+  const stats = loadStats();
   modules.forEach((m) => {
     const meta = MODULE_META[m.id] || { icon: "📘", color: "#38bdf8", sub: "JSMU Module" };
     const topicCount = m.subjects.reduce((acc, s) => acc + s.topics.length, 0);
+    const mp = stats.moduleProgress?.[m.id];
+    const modAcc = mp && mp.solved ? Math.round((mp.correct / mp.solved) * 100) : 0;
+    const progressHtml =
+      mp && mp.solved
+        ? `<div class="mod-progress-row">
+             <div class="mod-progress-track"><div class="mod-progress-fill" style="width:${modAcc}%"></div></div>
+             <span class="mod-progress-text">${mp.solved} Q · ${modAcc}%</span>
+           </div>`
+        : "";
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = `mod-card${m.id === state.config.moduleId ? " active" : ""}`;
@@ -268,6 +450,7 @@ function renderModuleCards() {
       <div class="mod-info">
         <div class="mod-title">${m.order}. ${escapeHtml(m.name)}</div>
         <div class="mod-meta">${topicCount} topics · ${meta.sub}</div>
+        ${progressHtml}
       </div>
     `;
     btn.addEventListener("click", () => {
@@ -276,6 +459,7 @@ function renderModuleCards() {
       $("topic-search").value = "";
       grid.querySelectorAll(".mod-card").forEach((c) => c.classList.remove("active"));
       btn.classList.add("active");
+      saveConfigPrefs();
       playTone("click");
       renderSubjectChips();
     });
@@ -393,7 +577,97 @@ function updateLOPreview() {
 function bindConfigEvents() {
   $("brand-home").addEventListener("click", () => {
     stopTimer();
+    saveActiveSession();
+    refreshResumeBanner();
     showScreen("screen-config");
+  });
+
+  $("momentum-pill").addEventListener("click", () => {
+    showScreen("screen-config");
+    const drawer = $("progress-drawer");
+    drawer.open = true;
+    drawer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  $("resume-btn").addEventListener("click", () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(ACTIVE_SESSION_KEY) || "null");
+      if (!saved || !Array.isArray(saved.questions) || !saved.questions.length) return;
+      stopTimer();
+      state.config.mode = saved.mode || "practice";
+      if (saved.moduleId) state.config.moduleId = saved.moduleId;
+      state.session = {
+        questions: saved.questions,
+        currentIndex: saved.currentIndex || 0,
+        answers: saved.answers || new Array(saved.questions.length).fill(null),
+        flagged: saved.flagged || new Array(saved.questions.length).fill(false),
+        streak: saved.streak || 0,
+        bestStreak: saved.bestStreak || 0,
+        timerSeconds: saved.timerSeconds || 0,
+        timerId: null,
+        questionStartMs: Date.now(),
+        timingsMs: saved.timingsMs || [],
+      };
+      showScreen("screen-arena");
+      renderQuestionDots();
+      renderQuestion();
+      startTimer();
+    } catch {
+      clearActiveSession();
+    }
+  });
+
+  $("discard-resume-btn").addEventListener("click", () => {
+    clearActiveSession();
+    showToast("Saved quiz discarded");
+  });
+
+  $("export-progress-btn").addEventListener("click", () => {
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      stats: loadStats(),
+      history: loadHistory(),
+      mistakes: loadSavedMistakes(),
+      config: state.config,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `proffpulse-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast("Progress backup downloaded");
+  });
+
+  $("import-progress-input").addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      if (data.stats) localStorage.setItem(STATS_KEY, JSON.stringify(data.stats));
+      if (data.history) localStorage.setItem(HISTORY_KEY, JSON.stringify(data.history));
+      if (data.mistakes) localStorage.setItem(MISTAKES_KEY, JSON.stringify(data.mistakes));
+      renderMomentumStats();
+      renderSessionHistory();
+      refreshSavedMistakesUI();
+      if (state.syllabus) renderModuleCards();
+      showToast("Progress restored successfully!");
+    } catch {
+      showToast("Invalid backup JSON file");
+    }
+    e.target.value = "";
+  });
+
+  $("reset-progress-btn").addEventListener("click", () => {
+    if (!confirm("Reset all saved stats, mistakes, and session history in this browser?")) return;
+    [MISTAKES_KEY, STATS_KEY, HISTORY_KEY, ACTIVE_SESSION_KEY].forEach((k) => localStorage.removeItem(k));
+    renderMomentumStats();
+    renderSessionHistory();
+    refreshSavedMistakesUI();
+    refreshResumeBanner();
+    if (state.syllabus) renderModuleCards();
+    showToast("Browser progress cleared");
   });
 
   $("topic-search").addEventListener("input", (e) => {
@@ -408,16 +682,19 @@ function bindConfigEvents() {
 
   bindGroup("source-group", ".seg-btn", (val) => {
     state.config.source = val;
+    saveConfigPrefs();
     playTone("click");
   });
 
   bindGroup("mode-group", ".mode-card", (val) => {
     state.config.mode = val;
+    saveConfigPrefs();
     playTone("click");
   });
 
   bindGroup("length-group", ".pill", (val) => {
     state.config.length = Number(val);
+    saveConfigPrefs();
     playTone("click");
   });
 
@@ -548,6 +825,7 @@ function startSession(questions, mode) {
   showScreen("screen-arena");
   renderQuestionDots();
   renderQuestion();
+  saveActiveSession();
   startTimer();
 }
 
@@ -564,6 +842,9 @@ function startTimer() {
       }
     } else {
       state.session.timerSeconds++;
+    }
+    if (state.session.timerSeconds % 5 === 0) {
+      saveActiveSession();
     }
     updateTimerDisplay();
   }, 1000);
@@ -739,6 +1020,7 @@ function selectOption(chosenIdx) {
 
   $("next-btn").disabled = false;
   renderQuestionDots();
+  saveActiveSession();
 }
 
 function showWhyCard(q, isCorrect) {
@@ -783,6 +1065,7 @@ function toggleFlag() {
   $("flag-label").textContent = isFlagged ? "Flagged" : "Flag";
   playTone("click");
   renderQuestionDots();
+  saveActiveSession();
 }
 
 function advanceQuestion() {
@@ -791,6 +1074,7 @@ function advanceQuestion() {
   if (currentIndex < questions.length - 1) {
     state.session.currentIndex++;
     renderQuestion();
+    saveActiveSession();
   } else {
     finishSession();
   }
@@ -807,6 +1091,8 @@ function bindArenaEvents() {
   $("flag-btn").addEventListener("click", toggleFlag);
   $("quit-btn").addEventListener("click", () => {
     stopTimer();
+    saveActiveSession();
+    refreshResumeBanner();
     showScreen("screen-config");
   });
 
@@ -875,7 +1161,8 @@ function finishSession() {
   );
   const existing = loadSavedMistakes().filter((q) => !correctIds.has(q.id) && !wrongIds.has(q.id));
   saveMistakes([...wrongQuestions, ...existing]);
-  recordSessionStats(questions.length, maxStreak);
+  recordSessionStats(questions, answers, maxStreak);
+  clearActiveSession();
 
   const total = questions.length;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
@@ -883,6 +1170,18 @@ function finishSession() {
   const avgSec = validTimings.length
     ? Math.round(validTimings.reduce((a, b) => a + b, 0) / validTimings.length / 1000)
     : 0;
+
+  const modObj = state.syllabus?.modules.find((m) => m.id === state.config.moduleId);
+  addSessionHistory({
+    ts: Date.now(),
+    moduleId: state.config.moduleId,
+    moduleName: modObj ? modObj.name : "Quiz",
+    mode: state.config.mode,
+    correct,
+    total,
+    accuracy,
+    avgSec,
+  });
 
   $("verdict-accuracy").textContent = `${accuracy}%`;
   $("verdict-score").textContent = `${correct} / ${total}`;
