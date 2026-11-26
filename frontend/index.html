@@ -42,6 +42,9 @@
       </div>
 
       <div class="topbar-meta">
+        <button class="syllabus-nav-btn" id="open-syllabus-btn" type="button" title="Browse & filter all 1,142 JSMU Learning Objectives">
+          <span>📚</span> <span>Syllabus &amp; LOs</span>
+        </button>
         <div class="momentum-pill" id="momentum-pill" role="button" tabindex="0" title="View your saved browser progress">
           <span id="total-solved-badge">✓ 0 solved</span>
           <span class="sep">·</span>
@@ -109,16 +112,15 @@
             <select id="select-topic" aria-label="Topic"></select>
           </div>
 
-          <details class="lo-preview" id="lo-preview">
-            <summary>
-              <span class="lo-summary-left">
-                <span class="lo-chevron" aria-hidden="true">▸</span>
-                <span id="lo-summary-text">JSMU Learning Objectives (0)</span>
-              </span>
+          <div class="lo-lock-bar">
+            <span class="lo-lock-info">
               <span class="lo-badge">Syllabus Locked</span>
-            </summary>
-            <ul id="lo-list" class="lo-list"></ul>
-          </details>
+              <span id="lo-summary-text">0 JSMU Learning Objectives in selection</span>
+            </span>
+            <button type="button" class="btn-link" id="open-syllabus-from-config">
+              Explore &amp; Filter All LOs ↗
+            </button>
+          </div>
         </div>
 
         <!-- Step 3: Source & Mode Cards -->
@@ -338,6 +340,37 @@
         </details>
       </section>
     </main>
+  </div>
+
+  <!-- JSMU Syllabus & Learning Objectives Explorer Modal -->
+  <div class="modal-backdrop hidden" id="syllabus-modal" role="dialog" aria-modal="true" aria-labelledby="syllabus-modal-title">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div>
+          <h2 id="syllabus-modal-title">📚 JSMU Syllabus &amp; Learning Objectives</h2>
+          <p class="modal-sub" id="lo-explorer-stats">0 / 0 objectives mastered · Tick off LOs as you revise</p>
+        </div>
+        <button type="button" class="icon-btn" id="close-syllabus-btn" aria-label="Close Syllabus Explorer">✕</button>
+      </div>
+
+      <div class="lo-filter-bar">
+        <div class="chip-row" id="lo-mod-chips"></div>
+        <div class="chip-row" id="lo-subj-chips"></div>
+        <div class="lo-search-controls">
+          <div class="search-wrap">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input type="search" id="lo-search-input" placeholder="Search any LO, nerve, enzyme, structure, or Surah…" autocomplete="off" />
+          </div>
+          <div class="segmented lo-status-seg" id="lo-status-group" role="group" aria-label="Mastery filter">
+            <button type="button" class="seg-btn active" data-value="all">All</button>
+            <button type="button" class="seg-btn" data-value="pending">Pending</button>
+            <button type="button" class="seg-btn" data-value="done">Mastered</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body" id="lo-explorer-body"></div>
+    </div>
   </div>
 
   <!-- Toast Notification -->

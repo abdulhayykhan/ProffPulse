@@ -14,6 +14,7 @@ const STATS_KEY = "proffpulse-stats";
 const HISTORY_KEY = "proffpulse-history";
 const ACTIVE_SESSION_KEY = "proffpulse-active-session";
 const CONFIG_KEY = "proffpulse-config";
+const LO_DONE_KEY = "proffpulse-lo-done";
 const THEME_KEY = "proffpulse-theme";
 const SOUND_KEY = "proffpulse-sound";
 
@@ -54,6 +55,12 @@ const state = {
     source: "mixed",
     mode: "practice",
     length: 10,
+  },
+  loExplorer: {
+    moduleId: "all",
+    subjectId: "all",
+    status: "all",
+    query: "",
   },
   session: {
     questions: [],
@@ -559,19 +566,235 @@ function getSelectedLOs() {
 
 function updateLOPreview() {
   const los = getSelectedLOs();
-  $("lo-summary-text").textContent = `JSMU Learning Objectives (${los.length})`;
-  const list = $("lo-list");
-  list.innerHTML = "";
-  los.slice(0, 40).forEach((item) => {
-    const li = document.createElement("li");
-    li.textContent = `${item.topic}: ${item.lo}`;
-    list.appendChild(li);
-  });
-  if (los.length > 40) {
-    const li = document.createElement("li");
-    li.textContent = `…and ${los.length - 40} more Learning Objectives in this selection.`;
-    list.appendChild(li);
+  $("lo-summary-text").textContent = `${los.length} JSMU Learning Objectives in selection`;
+}
+
+// --- JSMU Syllabus & LO Explorer ---
+function loadDoneLOs() {
+  try {
+    const raw = localStorage.getItem(LO_DONE_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  } catch {
+    return new Set();
   }
+}
+
+function saveDoneLOs(set) {
+  try {
+    localStorage.setItem(LO_DONE_KEY, JSON.stringify([...set]));
+  } catch {
+    // Ignore
+  }
+}
+
+function openSyllabusExplorer(preselectFromConfig = false) {
+  if (!state.syllabus) return;
+  if (preselectFromConfig) {
+    state.loExplorer.moduleId = state.config.moduleId || "all";
+    state.loExplorer.subjectId = state.config.subjectId || "all";
+  } else {
+    state.loExplorer.moduleId = "all";
+    state.loExplorer.subjectId = "all";
+  }
+  state.loExplorer.query = "";
+  $("lo-search-input").value = "";
+  renderLOExplorerFilters();
+  renderLOExplorerList();
+  $("syllabus-modal").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closeSyllabusExplorer() {
+  $("syllabus-modal").classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+function renderLOExplorerFilters() {
+  const modRow = $("lo-mod-chips");
+  modRow.innerHTML = "";
+
+  const addModChip = (id, label) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = `chip${state.loExplorer.moduleId === id ? " active" : ""}`;
+    b.textContent = label;
+    b.addEventListener("click", () => {
+      state.loExplorer.moduleId = id;
+      state.loExplorer.subjectId = "all";
+      renderLOExplorerFilters();
+      renderLOExplorerList();
+    });
+    modRow.appendChild(b);
+  };
+
+  addModChip("all", "All Modules");
+  state.syllabus.modules.forEach((m) => addModChip(m.id, `${m.order}. ${m.name}`));
+
+  // Subject chips available for chosen module(s)
+  const subjRow = $("lo-subj-chips");
+  subjRow.innerHTML = "";
+  const subjSet = new Set();
+  state.syllabus.modules
+    .filter((m) => state.loExplorer.moduleId === "all" || m.id === state.loExplorer.moduleId)
+    .forEach((m) => m.subjects.forEach((s) => subjSet.add(s.name)));
+
+  const addSubjChip = (id, label) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = `chip${state.loExplorer.subjectId === id ? " active" : ""}`;
+    b.textContent = label;
+    b.addEventListener("click", () => {
+      state.loExplorer.subjectId = id;
+      renderLOExplorerFilters();
+      renderLOExplorerList();
+    });
+    subjRow.appendChild(b);
+  };
+
+  addSubjChip("all", "All Subjects");
+  ["Anatomy", "Histology", "Embryology", "Physiology", "Biochemistry", "Islamiat"].forEach((sName) => {
+    if (subjSet.has(sName)) addSubjChip(sName.toLowerCase(), sName);
+  });
+}
+
+function highlightQuery(text, query) {
+  const safe = escapeHtml(text);
+  if (!query) return safe;
+  const esc = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return safe.replace(new RegExp(`(${esc})`, "gi"), '<mark class="lo-mark">$1</mark>');
+}
+
+function renderLOExplorerList() {
+  const body = $("lo-explorer-body");
+  body.innerHTML = "";
+  const doneSet = loadDoneLOs();
+  const q = state.loExplorer.query.trim().toLowerCase();
+
+  let totalAll = 0;
+  let masteredAll = 0;
+  let visibleTopics = 0;
+  let visibleLOs = 0;
+
+  state.syllabus.modules.forEach((m) => {
+    m.subjects.forEach((s) => {
+      s.topics.forEach((t) => {
+        t.los.forEach((_, idx) => {
+          totalAll++;
+          if (doneSet.has(`${t.id}::${idx}`)) masteredAll++;
+        });
+      });
+    });
+  });
+
+  const modules = state.syllabus.modules.filter(
+    (m) => state.loExplorer.moduleId === "all" || m.id === state.loExplorer.moduleId
+  );
+
+  modules.forEach((m) => {
+    m.subjects
+      .filter((s) => state.loExplorer.subjectId === "all" || s.id === state.loExplorer.subjectId)
+      .forEach((s) => {
+        s.topics.forEach((t) => {
+          const titleMatches = q && (t.title.toLowerCase().includes(q) || s.name.toLowerCase().includes(q));
+          const matchingLOs = t.los
+            .map((lo, idx) => ({ lo, idx, key: `${t.id}::${idx}`, isDone: doneSet.has(`${t.id}::${idx}`) }))
+            .filter((item) => {
+              if (state.loExplorer.status === "done" && !item.isDone) return false;
+              if (state.loExplorer.status === "pending" && item.isDone) return false;
+              if (q && !titleMatches && !item.lo.toLowerCase().includes(q)) return false;
+              return true;
+            });
+
+          if (!matchingLOs.length) return;
+          visibleTopics++;
+          visibleLOs += matchingLOs.length;
+
+          const card = document.createElement("div");
+          card.className = "lo-topic-card";
+
+          const head = document.createElement("div");
+          head.className = "lo-topic-head";
+          head.innerHTML = `
+            <div class="lo-topic-title-wrap">
+              <span class="badge">${escapeHtml(m.name)} · ${escapeHtml(s.name)}</span>
+              <span class="lo-topic-title">${highlightQuery(t.title, q)}</span>
+              <span class="lo-topic-count">${matchingLOs.length} LOs</span>
+            </div>
+          `;
+
+          const practiceBtn = document.createElement("button");
+          practiceBtn.type = "button";
+          practiceBtn.className = "btn btn-secondary btn-sm";
+          practiceBtn.textContent = "Practice Topic →";
+          practiceBtn.addEventListener("click", async () => {
+            closeSyllabusExplorer();
+            state.config.moduleId = m.id;
+            renderModuleCards();
+            state.config.subjectId = s.id;
+            $("subject-chips").querySelectorAll(".chip").forEach((c) => {
+              c.classList.toggle("active", c.textContent.toLowerCase().startsWith(s.name.toLowerCase()));
+            });
+            populateTopics();
+            state.config.topicId = t.id;
+            $("select-topic").value = t.id;
+            updateLOPreview();
+            await launchConfiguredQuiz();
+          });
+          head.appendChild(practiceBtn);
+          card.appendChild(head);
+
+          const itemsDiv = document.createElement("div");
+          itemsDiv.className = "lo-items";
+          matchingLOs.forEach((item) => {
+            const label = document.createElement("label");
+            label.className = `lo-check-row${item.isDone ? " is-done" : ""}`;
+            const cb = document.createElement("input");
+            cb.type = "checkbox";
+            cb.checked = item.isDone;
+            cb.addEventListener("change", () => {
+              const latest = loadDoneLOs();
+              if (cb.checked) latest.add(item.key);
+              else latest.delete(item.key);
+              saveDoneLOs(latest);
+              label.classList.toggle("is-done", cb.checked);
+              updateLOExplorerHeaderStats();
+            });
+            const span = document.createElement("span");
+            span.innerHTML = highlightQuery(item.lo, q);
+            label.appendChild(cb);
+            label.appendChild(span);
+            itemsDiv.appendChild(label);
+          });
+
+          card.appendChild(itemsDiv);
+          body.appendChild(card);
+        });
+      });
+  });
+
+  if (visibleTopics === 0) {
+    body.innerHTML = `<div class="lo-topic-card"><p class="subtitle">No Learning Objectives match your current filter. Try clearing the search or switching status.</p></div>`;
+  }
+
+  $("lo-explorer-stats").textContent = `${masteredAll} / ${totalAll} objectives mastered · Showing ${visibleLOs} LOs across ${visibleTopics} topics`;
+}
+
+function updateLOExplorerHeaderStats() {
+  const doneSet = loadDoneLOs();
+  let totalAll = 0;
+  let masteredAll = 0;
+  state.syllabus.modules.forEach((m) =>
+    m.subjects.forEach((s) =>
+      s.topics.forEach((t) =>
+        t.los.forEach((_, idx) => {
+          totalAll++;
+          if (doneSet.has(`${t.id}::${idx}`)) masteredAll++;
+        })
+      )
+    )
+  );
+  const current = $("lo-explorer-stats").textContent.split("·")[1] || "";
+  $("lo-explorer-stats").textContent = `${masteredAll} / ${totalAll} objectives mastered ·${current}`;
 }
 
 function bindConfigEvents() {
@@ -622,12 +845,33 @@ function bindConfigEvents() {
     showToast("Saved quiz discarded");
   });
 
+  $("open-syllabus-btn").addEventListener("click", () => openSyllabusExplorer(false));
+  $("open-syllabus-from-config").addEventListener("click", () => openSyllabusExplorer(true));
+  $("close-syllabus-btn").addEventListener("click", closeSyllabusExplorer);
+  $("syllabus-modal").addEventListener("click", (e) => {
+    if (e.target === $("syllabus-modal")) closeSyllabusExplorer();
+  });
+  $("lo-search-input").addEventListener("input", (e) => {
+    state.loExplorer.query = e.target.value;
+    renderLOExplorerList();
+  });
+  bindGroup("lo-status-group", ".seg-btn", (val) => {
+    state.loExplorer.status = val;
+    renderLOExplorerList();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !$("syllabus-modal").classList.contains("hidden")) {
+      closeSyllabusExplorer();
+    }
+  });
+
   $("export-progress-btn").addEventListener("click", () => {
     const payload = {
       exportedAt: new Date().toISOString(),
       stats: loadStats(),
       history: loadHistory(),
       mistakes: loadSavedMistakes(),
+      loDone: [...loadDoneLOs()],
       config: state.config,
     };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -648,6 +892,7 @@ function bindConfigEvents() {
       if (data.stats) localStorage.setItem(STATS_KEY, JSON.stringify(data.stats));
       if (data.history) localStorage.setItem(HISTORY_KEY, JSON.stringify(data.history));
       if (data.mistakes) localStorage.setItem(MISTAKES_KEY, JSON.stringify(data.mistakes));
+      if (Array.isArray(data.loDone)) localStorage.setItem(LO_DONE_KEY, JSON.stringify(data.loDone));
       renderMomentumStats();
       renderSessionHistory();
       refreshSavedMistakesUI();
@@ -661,7 +906,7 @@ function bindConfigEvents() {
 
   $("reset-progress-btn").addEventListener("click", () => {
     if (!confirm("Reset all saved stats, mistakes, and session history in this browser?")) return;
-    [MISTAKES_KEY, STATS_KEY, HISTORY_KEY, ACTIVE_SESSION_KEY].forEach((k) => localStorage.removeItem(k));
+    [MISTAKES_KEY, STATS_KEY, HISTORY_KEY, ACTIVE_SESSION_KEY, LO_DONE_KEY].forEach((k) => localStorage.removeItem(k));
     renderMomentumStats();
     renderSessionHistory();
     refreshSavedMistakesUI();
