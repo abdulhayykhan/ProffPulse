@@ -352,7 +352,8 @@ function restoreSavedConfig() {
 }
 
 function saveActiveSession() {
-  if (!state.session.questions.length) return;
+  if (!state.session.questions.length || state.session.completed) return;
+  if (!$("screen-arena").classList.contains("active")) return;
   try {
     localStorage.setItem(
       ACTIVE_SESSION_KEY,
@@ -818,7 +819,9 @@ function updateLOExplorerHeaderStats() {
 function bindConfigEvents() {
   $("brand-home").addEventListener("click", () => {
     stopTimer();
-    saveActiveSession();
+    if ($("screen-arena").classList.contains("active") && !state.session.completed) {
+      saveActiveSession();
+    }
     refreshResumeBanner();
     showScreen("screen-config");
   });
@@ -850,6 +853,7 @@ function bindConfigEvents() {
         timingsMs: saved.timingsMs || [],
         isRetry: Boolean(saved.isRetry),
         retryTopics: saved.retryTopics || [],
+        completed: false,
       };
       showScreen("screen-arena");
       renderQuestionDots();
@@ -1117,6 +1121,7 @@ function startSession(questions, mode, opts = {}) {
     timingsMs: [],
     isRetry: Boolean(opts.isRetry),
     retryTopics: opts.retryTopics || [],
+    completed: false,
   };
 
   showScreen("screen-arena");
@@ -1459,6 +1464,7 @@ function finishSession() {
   const existing = loadSavedMistakes().filter((q) => !correctIds.has(q.id) && !wrongIds.has(q.id));
   saveMistakes([...wrongQuestions, ...existing]);
   recordSessionStats(questions, answers, maxStreak);
+  state.session.completed = true;
   clearActiveSession();
 
   const total = questions.length;
