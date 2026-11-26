@@ -47,18 +47,42 @@ Return ONLY a JSON array of objects with this exact schema:
 Skip any question whose answer key is not visible or unclear."""
 
 
-def ocr_pdf_with_gemini(pdf_path: Path, module_id: str, model) -> list[dict]:
+def _get_gemini_keys() -> list[str]:
+    keys: list[str] = []
+    for var in ("GEMINI_API_KEY_1", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        val = os.environ.get(var, "").strip()
+        if val and val not in keys:
+            keys.append(val)
+    return keys
+
+
+def ocr_pdf_with_gemini(pdf_path: Path, module_id: str, gemini_keys: list[str]) -> list[dict]:
+    import google.generativeai as genai
+
     doc = fitz.open(pdf_path)
     extracted: list[dict] = []
+    key_idx = 0
 
     for page_idx, page in enumerate(doc, 1):
         pix = page.get_pixmap(dpi=150)
         img_bytes = pix.tobytes("png")
+        resp = None
+        while key_idx < len(gemini_keys):
+            try:
+                genai.configure(api_key=gemini_keys[key_idx])
+                model = genai.GenerativeModel("gemini-3.8-flash")
+                resp = model.generate_content([
+                    OCR_PROMPT,
+                    {"mime_type": "image/png", "data": img_bytes},
+                ])
+                break
+            except Exception as exc:
+                print(f"  [failover] {pdf_path.name} p.{page_idx} key #{key_idx + 1}: {exc}")
+                key_idx += 1
+        if resp is None:
+            print(f"  [stop] All Gemini keys exhausted at {pdf_path.name} p.{page_idx}")
+            break
         try:
-            resp = model.generate_content([
-                OCR_PROMPT,
-                {"mime_type": "image/png", "data": img_bytes},
-            ])
             raw = (resp.text or "").strip()
             start, end = raw.find("["), raw.rfind("]")
             if start == -1 or end == -1:
@@ -88,22 +112,17 @@ def ocr_pdf_with_gemini(pdf_path: Path, module_id: str, model) -> list[dict]:
 
 
 def main() -> None:
-    api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    if not api_key:
-        print("GEMINI_API_KEY not set. Set GEMINI_API_KEY in .env to run Vision OCR on scanned Cracked Banks.")
+    gemini_keys = _get_gemini_keys()
+    if not gemini_keys:
+        print("GEMINI_API_KEY_1..3 not set. Set at least one Gemini key in .env to run Vision OCR.")
         sys.exit(0)
-
-    import google.generativeai as genai
-
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.0-flash")
 
     all_q: list[dict] = []
     for mod_id, pdf_path in CRACKED_FILES:
         if not pdf_path.exists():
             continue
         print(f"OCR scanning {pdf_path.name} ({mod_id})...")
-        qs = ocr_pdf_with_gemini(pdf_path, mod_id, model)
+        qs = ocr_pdf_with_gemini(pdf_path, mod_id, gemini_keys)
         print(f"  -> extracted {len(qs)} MCQs")
         all_q.extend(qs)
 

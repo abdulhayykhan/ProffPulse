@@ -1,17 +1,26 @@
-"""AI BCQ generation engine grounded strictly in UMDC lecture slides and JSMU LOs."""
+"""AI BCQ generation engine grounded strictly in UMDC lecture slides and JSMU LOs.
+
+Failover chain:
+    Gemini Key 1 -> Gemini Key 2 -> Gemini Key 3 -> Groq API Key
+"""
 
 from __future__ import annotations
 
 import json
+import logging
 import os
 import random
 import re
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger("proffpulse.ai")
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
@@ -22,8 +31,30 @@ LECTURE_INDEX: list[dict[str, Any]] = (
 )
 
 
+def get_gemini_keys() -> list[str]:
+    """Return ordered, deduplicated Gemini API keys from environment."""
+    candidates: list[str] = []
+    for var in ("GEMINI_API_KEY_1", "GEMINI_API_KEY_2", "GEMINI_API_KEY_3", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        val = os.environ.get(var, "").strip()
+        if val:
+            candidates.append(val)
+    multi = os.environ.get("GEMINI_API_KEYS", "").strip()
+    if multi:
+        for part in multi.split(","):
+            if part.strip():
+                candidates.append(part.strip())
+
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for key in candidates:
+        if key not in seen:
+            seen.add(key)
+            ordered.append(key)
+    return ordered
+
+
 def is_ai_configured() -> bool:
-    return bool(os.environ.get("GROQ_API_KEY") or os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
+    return bool(get_gemini_keys() or os.environ.get("GROQ_API_KEY", "").strip())
 
 
 def _tokenize(text: str) -> set[str]:
@@ -147,6 +178,35 @@ def _parse_json_array(raw: str) -> list[dict[str, Any]]:
     return valid
 
 
+def _call_gemini(api_key: str, prompt: str) -> str:
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={api_key}"
+    payload = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.4, "maxOutputTokens": 3000},
+    }).encode("utf-8")
+    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=25) as resp:
+        data = json.loads(resp.read().decode("utf-8"))
+    candidates = data.get("candidates") or []
+    if not candidates:
+        return ""
+    parts = candidates[0].get("content", {}).get("parts") or []
+    return "".join(p.get("text", "") for p in parts)
+
+
+def _call_groq(api_key: str, prompt: str) -> str:
+    from groq import Groq
+
+    client = Groq(api_key=api_key)
+    resp = client.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4,
+        max_tokens=3000,
+    )
+    return resp.choices[0].message.content or ""
+
+
 def generate_ai_bcqs(
     module_id: str,
     module_name: str,
@@ -162,31 +222,34 @@ def generate_ai_bcqs(
     prompt = _build_prompt(module_name, subject, topic_title, los, context, count)
 
     raw_text = ""
-    groq_key = os.environ.get("GROQ_API_KEY")
-    gemini_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
 
+    # 1. Try Gemini keys 1 -> 2 -> 3 in order
+    for idx, gemini_key in enumerate(get_gemini_keys(), 1):
+        try:
+            raw_text = _call_gemini(gemini_key, prompt)
+            if raw_text.strip():
+                questions = _parse_json_array(raw_text)
+                if questions:
+                    for q in questions:
+                        q["module"] = module_id
+                        if sources and "UMDC" not in q["loRef"]:
+                            q["loRef"] = f"{q['loRef']} ({sources[0]})"
+                    return questions[:count]
+        except Exception as exc:
+            logger.warning("Gemini key #%d failed (%s); falling back to next provider.", idx, type(exc).__name__)
+
+    # 2. Fall back to Groq if all Gemini keys failed or hit rate limits
+    groq_key = os.environ.get("GROQ_API_KEY", "").strip()
     if groq_key:
-        from groq import Groq
+        try:
+            raw_text = _call_groq(groq_key, prompt)
+            questions = _parse_json_array(raw_text)
+            for q in questions:
+                q["module"] = module_id
+                if sources and "UMDC" not in q["loRef"]:
+                    q["loRef"] = f"{q['loRef']} ({sources[0]})"
+            return questions[:count]
+        except Exception as exc:
+            logger.warning("Groq fallback failed (%s).", type(exc).__name__)
 
-        client = Groq(api_key=groq_key)
-        resp = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.4,
-            max_tokens=3000,
-        )
-        raw_text = resp.choices[0].message.content or ""
-    elif gemini_key:
-        import google.generativeai as genai
-
-        genai.configure(api_key=gemini_key)
-        model = genai.GenerativeModel("gemini-2.0-flash")
-        resp = model.generate_content(prompt)
-        raw_text = resp.text or ""
-
-    questions = _parse_json_array(raw_text)
-    for q in questions:
-        q["module"] = module_id
-        if sources and "UMDC" not in q["loRef"]:
-            q["loRef"] = f"{q['loRef']} ({sources[0]})"
-    return questions[:count]
+    return []

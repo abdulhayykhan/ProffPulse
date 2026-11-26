@@ -6,6 +6,7 @@ PRD.md
 .env
 .env.*
 !.env.example
+.vercel/
 
 # Python
 __pycache__/
