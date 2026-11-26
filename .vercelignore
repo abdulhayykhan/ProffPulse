@@ -1,0 +1,10 @@
+1st year/
+PRD.md
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.git/
+scripts/
